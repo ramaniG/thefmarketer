@@ -103,7 +103,7 @@ class ConsultantCoverage(models.Model):
 
     consultant = models.ForeignKey(
         Consultant,
-        on_delete=models.CASCADE,,
+        on_delete=models.CASCADE,
     )
     state = models.CharField(max_length=2, choices=STATES, default=KL)
     created = models.DateTimeField(auto_now_add=True)
@@ -121,12 +121,6 @@ class ConsultantServices(models.Model):
     TF = 'TF'
     WW = 'WW'
 
-    SM = 'SM'
-    SE = 'SE'
-    ME = 'ME'
-    MH = 'MH'
-    HI = 'HI'
-
     SERVICES = (
         (FP, 'Financial Planner'),
         (LI, 'Life Insurance'),
@@ -134,6 +128,12 @@ class ConsultantServices(models.Model):
         (TF, 'Trust Fund'),
         (WW, 'Will Writing'),
     )
+
+    SM = 'SM'
+    SE = 'SE'
+    ME = 'ME'
+    MH = 'MH'
+    HI = 'HI'
 
     CLIENTSCALE = (
         (SM, 'Small (< 10)'),
@@ -145,7 +145,7 @@ class ConsultantServices(models.Model):
 
     consultant = models.ForeignKey(
         Consultant,
-        on_delete=models.CASCADE,,
+        on_delete=models.CASCADE,
     )
     service = models.CharField(max_length=2, choices=SERVICES, default=FP)
     company = models.CharField(max_length=255, blank=True)
@@ -161,3 +161,64 @@ class ConsultantServices(models.Model):
     def __str__(self):
         """Return a human readable representation of the model instance."""
         return "{}".format(self.consultant + ' : ' + service)
+
+class Request(models.Model):
+    FP = 'FP'
+    LI = 'LI'
+    IN = 'IN'
+    TF = 'TF'
+    WW = 'WW'
+
+    SERVICES = (
+        (FP, 'Financial Planner'),
+        (LI, 'Life Insurance'),
+        (IN, 'Investments'),
+        (TF, 'Trust Fund'),
+        (WW, 'Will Writing'),
+    )
+
+    consultant = models.ForeignKey(
+        Consultant,
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        Users,
+        on_delete=models.CASCADE,
+    )
+    service = models.CharField(max_length=2, choices=SERVICES)
+    reviewsubmited = models.BooleanField(blank=False)
+    active = models.BooleanField(blank=False)
+    completed = models.BooleanField(blank=False)
+    message = models.TextField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+class Review(models.Model):
+    request = models.ForeignKey(
+        Users,
+        on_delete=models.CASCADE,
+    )
+    stars = models.IntegerField()
+    message = models.TextField(blank=True)
+    public = models.BooleanField(blank=False)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+class Chat(models.Model):
+    FC = 'FC'
+    US = 'UC'
+
+    USERTYPE = (
+        (FC, 'Consultant'),
+        (US, 'User'),
+    )
+
+    request = models.ForeignKey(
+        Users,
+        on_delete=models.CASCADE,
+    )
+    message = models.TextField(blank=True)
+    read = models.BooleanField(blank=False)
+    usertype = models.CharField(max_length=2, choices=USERTYPE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
