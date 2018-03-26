@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Alert from 'react-bootstrap/lib/Alert';
 import logo from './logo.svg';
 import './App.css';
 
