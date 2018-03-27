@@ -2,14 +2,16 @@
 <html>
 <title>W3.CSS</title>
 
-
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="custom.css">
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css" />
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script>
 $( function() {
@@ -24,7 +26,8 @@ $( function() {
     runEffect();
   });
 
-  $( ".toggler" ).on( "click", function() {
+  $( "#effect" ).on( "click", function(e) {
+    if (e.target !== this) return;
     runEffect();
   });
 
@@ -40,7 +43,7 @@ $( function() {
       <div id="effect" class="container">
         <a href="#">
           <div class="thumbnail">
-            <img src="profile-avatar.png" class="img-circle" alt="Cinque Terre" width="100" height="100">
+            <img src="profile-avatar.png" class="img-circle" width="100" height="100">
             <div class="caption">
               <h3>John Doe</h3>
             </div>

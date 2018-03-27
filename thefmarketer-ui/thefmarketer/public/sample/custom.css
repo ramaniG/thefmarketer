@@ -87,3 +87,18 @@ h3 {
     padding: 0.4em;
     text-align: center;
   }
+
+
+  #slider12a .slider-selection {
+	   background: orange;
+  }
+  #slider12a .slider-handle {
+	   background: orange;
+  }
+
+  .star-rating {
+    line-height:32px;
+    font-size:1.25em;
+  }
+
+  .star-rating .glyphicon-star{color: orange;}
