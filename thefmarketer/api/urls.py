@@ -1,5 +1,6 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
+from .views import Login
 from .views import UsersList,UsersDetail
 from .views import ConsultantList,ConsultantDetail
 from .views import ConsultantCoverageList,ConsultantCoverageDetail
@@ -9,6 +10,7 @@ from .views import ReviewList,ReviewDetail
 from .views import ChatList,ChatDetail
 
 urlpatterns = [
+    url(r'^login/$', Login.as_view()),
     url(r'^users/$', UsersList.as_view()),
     url(r'^user/(?P<pk>[0-9]+)/$', UsersDetail.as_view()),
     url(r'^consultants/$', ConsultantList.as_view()),

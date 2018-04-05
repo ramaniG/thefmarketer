@@ -1,6 +1,23 @@
 from .models import Users,Consultant,ConsultantCoverage,ConsultantServices,Request,Review,Chat
-from .serializers import UsersSerializer,ConsultantSerializer,ConsultantCoverageSerializer,ConsultantServicesSerializer,RequestSerializer,ReviewSerializer,ChatSerializer
+from .serializers import LoginSerializer,UsersSerializer,ConsultantSerializer,ConsultantCoverageSerializer,ConsultantServicesSerializer,RequestSerializer,ReviewSerializer,ChatSerializer
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+'''Login'''
+class Login(APIView):
+    def get(self, request, format=None):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                user = Users.objects.get(email = serializer.email, password = serializer.password)
+                user.password = ""
+                return Response(user, status=status.HTTP_200_OK)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 '''Users'''
 class UsersList(generics.ListCreateAPIView):

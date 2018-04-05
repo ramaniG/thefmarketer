@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from .models import Users,Consultant,ConsultantCoverage,ConsultantServices,Request,Review,Chat
 
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(max_length=100)
+
 class UsersSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
 
