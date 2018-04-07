@@ -2,7 +2,8 @@ from rest_framework import serializers
 from .models import Users,Consultant,ConsultantCoverage,ConsultantServices,Request,Review,Chat
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    '''email = serializers.EmailField()'''
+    email = serializers.CharField(max_length=200)
     password = serializers.CharField(max_length=100)
 
 class UsersSerializer(serializers.ModelSerializer):

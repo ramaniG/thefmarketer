@@ -4,16 +4,24 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.renderers import JSONRenderer
 
 '''Login'''
 class Login(APIView):
-    def get(self, request, format=None):
-        serializer = LoginSerializer(data=request.data)
+    def post(self, request, format=None):
+        serializer = LoginSerializer(data=request.data, many=False)
         if serializer.is_valid():
             try:
-                user = Users.objects.get(email = serializer.email, password = serializer.password)
-                user.password = ""
-                return Response(user, status=status.HTTP_200_OK)
+                '''print(serializer.data)
+                print(serializer.data['email'])
+                print(serializer.data['password'])'''
+                user = Users.objects.get(email = serializer.data['email'], password = serializer.data['password'])
+                '''user = Users()
+                user.fname = 'Heloooo'
+                user.password = ""'''
+                usersSerializer = UsersSerializer(user)
+                return Response(usersSerializer.data, status=status.HTTP_200_OK)
             except ObjectDoesNotExist:
                 return Response(status=status.HTTP_204_NO_CONTENT)
         else:
