@@ -1,7 +1,3 @@
-import { authHeader } from '../_helpers';
-import axios from 'axios';
-
-const BASE_URL = 'http://127.0.0.1:8000';
 
 export const userService = {
     login,
@@ -15,20 +11,10 @@ function login(email, password) {
         body: JSON.stringify({ email, password })
     };
 
-    // const url = `${BASE_URL}/login/`;
-    // return axios.post(url, {email : e, password : p})
-    //   .then(response => {
-    //       console.log(response);
-    //       if (response.data) {
-    //           localStorage.setItem('user', JSON.stringify(response.data));
-    //           return response.json;
-    //   }
-    // });
-
     return fetch('http://127.0.0.1:8000/login/', requestOptions)
         .then(response => {
             console.log(response);
-            if (!response.ok || response.status != 200) {
+            if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
 
