@@ -1,11 +1,12 @@
 from .models import Users,Consultant,ConsultantCoverage,ConsultantServices,Request,Review,Chat
-from .serializers import LoginSerializer,UsersSerializer,ConsultantSerializer,ConsultantCoverageSerializer,ConsultantServicesSerializer,RequestSerializer,ReviewSerializer,ChatSerializer
+from .serializers import LoginSerializer,SearchSerializer,UsersSerializer,ConsultantSerializer,ConsultantCoverageSerializer,ConsultantServicesSerializer,RequestSerializer,ReviewSerializer,ChatSerializer
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.renderers import JSONRenderer
+from django.db.models import Q
 
 '''Login'''
 class Login(APIView):
@@ -13,18 +14,30 @@ class Login(APIView):
         serializer = LoginSerializer(data=request.data, many=False)
         if serializer.is_valid():
             try:
-                '''print(serializer.data)
-                print(serializer.data['email'])
-                print(serializer.data['password'])'''
                 user = Users.objects.get(email = serializer.data['email'], password = serializer.data['password'])
-                '''user = Users()
-                user.fname = 'Heloooo'
-                user.password = ""'''
+                user.password = ""
                 usersSerializer = UsersSerializer(user)
                 return Response(usersSerializer.data, status=status.HTTP_200_OK)
             except ObjectDoesNotExist:
                 return Response(status=status.HTTP_204_NO_CONTENT)
         else:
+            print("The error is: ", serializer.errors)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+'''Search'''
+class Search(APIView):
+    def post(self, request, format=None):
+        serializer = SearchSerializer(data=request.data, many=False)
+        if serializer.is_valid():
+            query = Q(fname__contains = serializer.data['name'])
+            query.add(Q(lname__contains = serializer.data['name']), Q.OR)
+            consultant = Consultant.objects.filter(query).filter(
+                coverages__state__contains = serializer.data['location'],
+                services__service__contains = serializer.data['service']).distinct()
+            consultantSerializer = ConsultantSerializer(consultant, many=True)
+            return Response(consultantSerializer.data, status=status.HTTP_200_OK)
+        else:
+            print("The error is: ", serializer.errors)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 '''Users'''

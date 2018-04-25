@@ -40,17 +40,17 @@ class LoginPage extends React.Component {
         const { loggingIn } = this.props;
         const { email, password, submitted } = this.state;
         return (
-          <div class="main">
+          <div className="main">
             <h3>Sign In</h3>
-            <button type="submit" class="btn-block btn btn-primary">Facebook</button>
+            <button type="submit" className="btn-block btn btn-primary">Facebook</button>
             <form onSubmit={this.handleSubmit}>
-              <div class="login-or">
-                <hr class="hr-or" />
-                <span class="span-or">or</span>
+              <div className="login-or">
+                <hr className="hr-or" />
+                <span className="span-or">or</span>
               </div>
-              <input type="text" class="form-control" id="inputUsernameEmail" value={email} placeholder="Email" onChange={this.handleChange} />
-              <input type="password" class="form-control" id="inputPassword" value={password} placeholder="Password" onChange={this.handleChange} />
-              <button type="submit" class="btn-block btn btn-primary">Log In</button>
+              <input type="text" className="form-control" name="email" value={email} placeholder="Email" onChange={this.handleChange} />
+              <input type="password" className="form-control" name="password" value={password} placeholder="Password" onChange={this.handleChange} />
+              <button type="submit" className="btn-block btn btn-primary">Log In</button>
               <a href="#">Forgot password?</a>
             </form>
           </div>

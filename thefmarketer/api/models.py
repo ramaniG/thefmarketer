@@ -30,7 +30,7 @@ class Users(models.Model):
 
     def __str__(self):
         """Return a human readable representation of the model instance."""
-        return "{}".format(self.name)
+        return "{}".format(self.fname + ' ' + self.lname)
 
 class Consultant(models.Model):
     """This represent the registered consultant."""
@@ -62,7 +62,7 @@ class Consultant(models.Model):
 
     def __str__(self):
         """Return a human readable representation of the model instance."""
-        return "{}".format(self.name)
+        return "{}".format(self.fname + ' ' + self.lname)
 
 class ConsultantCoverage(models.Model):
     JH = 'JH'
@@ -103,6 +103,7 @@ class ConsultantCoverage(models.Model):
 
     consultant = models.ForeignKey(
         Consultant,
+        related_name='coverages',
         on_delete=models.CASCADE,
     )
     state = models.CharField(max_length=2, choices=STATES, default=KL)
@@ -145,6 +146,7 @@ class ConsultantServices(models.Model):
 
     consultant = models.ForeignKey(
         Consultant,
+        related_name='services',
         on_delete=models.CASCADE,
     )
     service = models.CharField(max_length=2, choices=SERVICES, default=FP)
@@ -154,7 +156,7 @@ class ConsultantServices(models.Model):
     activesince = models.DateTimeField()
     yearsofexpirience = models.IntegerField()
     clientscale = models.CharField(max_length=2, choices=CLIENTSCALE, default=SM)
-    proof = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=50000)
+    proof = models.ImageField(upload_to='proof/')
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 

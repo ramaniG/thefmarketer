@@ -6,6 +6,12 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=200)
     password = serializers.CharField(max_length=100)
 
+class SearchSerializer(serializers.Serializer):
+    service = serializers.CharField(max_length=2,allow_blank=True)
+    location = serializers.CharField(max_length=2,allow_blank=True)
+    name = serializers.CharField(max_length=100,allow_blank=True)
+    rating = serializers.IntegerField()
+
 class UsersSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
 
@@ -21,29 +27,6 @@ class UsersSerializer(serializers.ModelSerializer):
             'password',
             'showemail',
             'showcontactno',
-            'verified',
-            'lastLogin',
-            'created',
-            'modified'
-        )
-        read_only_fields = ('created', 'modified')
-
-class ConsultantSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = Consultant
-        fields = ('id',
-            'fname',
-            'lname',
-            'email1' ,
-            'contactno1',
-            'email2' ,
-            'contactno2',
-            'password',
-            'preferedcontact1',
-            'preferedcontact2',
             'verified',
             'lastLogin',
             'created',
@@ -84,6 +67,17 @@ class ConsultantServicesSerializer(serializers.ModelSerializer):
             'created',
             'modified'
         )
+        read_only_fields = ('created', 'modified')
+
+class ConsultantSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    coverages = ConsultantCoverageSerializer(many=True,read_only=True)
+    services = ConsultantServicesSerializer(many=True,read_only=True)
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Consultant
+        fields = ('__all__')
         read_only_fields = ('created', 'modified')
 
 class RequestSerializer(serializers.ModelSerializer):
