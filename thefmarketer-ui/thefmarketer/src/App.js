@@ -1,10 +1,8 @@
 import React from 'react';
-import { Route } from 'react-router';
 import { connect } from 'react-redux';
-import { ConnectedRouter, push } from 'react-router-redux'
+import { push } from 'react-router-redux'
 import { history } from './_helpers';
 import { alertActions } from './_actions';
-import { PrivateRoute } from './_components';
 import { LoginPage } from './login';
 import { HomePage } from './home';
 
@@ -19,6 +17,8 @@ class App extends React.Component {
             // clear alert on location change
             dispatch(alertActions.clear());
             console.log(location);
+            console.log(action);
+            
         });
     }
 
