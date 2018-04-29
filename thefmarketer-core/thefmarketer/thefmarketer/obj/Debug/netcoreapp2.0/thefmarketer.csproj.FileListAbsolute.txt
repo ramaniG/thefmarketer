@@ -1,0 +1,11 @@
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\bin\Debug\netcoreapp2.0\thefmarketer.deps.json
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\bin\Debug\netcoreapp2.0\thefmarketer.runtimeconfig.json
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\bin\Debug\netcoreapp2.0\thefmarketer.runtimeconfig.dev.json
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\bin\Debug\netcoreapp2.0\thefmarketer.dll
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\bin\Debug\netcoreapp2.0\thefmarketer.pdb
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.csprojResolveAssemblyReference.cache
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.csproj.CoreCompileInputs.cache
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.AssemblyInfoInputs.cache
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.AssemblyInfo.cs
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.dll
+C:\Freelance\TheFmarketer\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.pdb
