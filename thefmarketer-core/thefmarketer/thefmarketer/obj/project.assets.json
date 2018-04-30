@@ -12535,26 +12535,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Ramani Ganason\\.nuget\\packages\\": {},
+    "C:\\Users\\git\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
-    "restoreSettings": {
-      "hideWarningsAndErrors": true
-    },
     "restore": {
-      "projectUniqueName": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\thefmarketer.csproj",
+      "projectUniqueName": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\thefmarketer.csproj",
       "projectName": "thefmarketer",
-      "projectPath": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\thefmarketer.csproj",
-      "packagesPath": "C:\\Users\\Ramani Ganason\\.nuget\\packages\\",
-      "outputPath": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\obj\\",
+      "projectPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\thefmarketer.csproj",
+      "packagesPath": "C:\\Users\\git\\.nuget\\packages\\",
+      "outputPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Ramani Ganason\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\git\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12578,14 +12575,14 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
-          "Microsoft.NETCore.App": {
-            "target": "Package",
-            "version": "2.0",
-            "autoReferenced": true
-          },
           "Microsoft.AspNetCore.All": {
             "target": "Package",
-            "version": "2.0.5"
+            "version": "[2.0.5, )"
+          },
+          "Microsoft.NETCore.App": {
+            "target": "Package",
+            "version": "[2.0.0, )",
+            "autoReferenced": true
           }
         },
         "imports": [
