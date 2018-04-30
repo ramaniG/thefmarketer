@@ -14,7 +14,6 @@ D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\bin\Debug\net
 D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\bin\Debug\netcoreapp2.0\thefmarketer.runtimeconfig.dev.json
 D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\bin\Debug\netcoreapp2.0\thefmarketer.dll
 D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\bin\Debug\netcoreapp2.0\thefmarketer.pdb
-D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.csprojResolveAssemblyReference.cache
 D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.csproj.CoreCompileInputs.cache
 D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.AssemblyInfoInputs.cache
 D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.AssemblyInfo.cs
