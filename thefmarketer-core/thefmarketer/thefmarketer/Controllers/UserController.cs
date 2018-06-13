@@ -22,13 +22,13 @@ namespace thefmarketer.Controllers
         }
 
         [HttpGet]
-        public List<User> GetAll()
+        public List<User> Get()
         {
             return _context.UserItems.ToList();
         }
 
-        [HttpGet("{id}", Name = "GetUser")]
-        public IActionResult GetById(long id)
+        [HttpGet("{id}")]
+        public IActionResult Get(long id)
         {
             var item = _context.UserItems.Find(id);
             if (item == null)

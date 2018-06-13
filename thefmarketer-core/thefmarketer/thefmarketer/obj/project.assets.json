@@ -12543,9 +12543,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\thefmarketer.csproj",
-      "projectName": "thefmarketer",
-      "projectPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\thefmarketer.csproj",
+      "projectUniqueName": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.API.csproj",
+      "projectName": "Fmarketer.API",
+      "projectPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.API.csproj",
       "packagesPath": "C:\\Users\\git\\.nuget\\packages\\",
       "outputPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\obj\\",
       "projectStyle": "PackageReference",

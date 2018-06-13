@@ -26,7 +26,7 @@ namespace thefmarketer
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddDbContext<MainDbContext>(opt => opt.UseInMemoryDatabase("TheFmarketer"));
-            services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))));
+            services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
         }
 

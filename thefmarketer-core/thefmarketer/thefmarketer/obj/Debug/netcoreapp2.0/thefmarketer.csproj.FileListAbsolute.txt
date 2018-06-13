@@ -19,3 +19,4 @@ D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\net
 D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.AssemblyInfo.cs
 D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.dll
 D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.pdb
+D:\Source\thefmarketer\thefmarketer-core\thefmarketer\thefmarketer\obj\Debug\netcoreapp2.0\thefmarketer.csprojAssemblyReference.cache
