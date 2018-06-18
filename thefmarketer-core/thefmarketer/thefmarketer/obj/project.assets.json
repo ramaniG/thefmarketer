@@ -12537,23 +12537,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\git\\.nuget\\packages\\": {},
+    "C:\\Users\\Ramani Ganason\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.API.csproj",
-      "projectName": "Fmarketer.API",
-      "projectPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.API.csproj",
-      "packagesPath": "C:\\Users\\git\\.nuget\\packages\\",
-      "outputPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\obj\\",
+      "projectUniqueName": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.Api.csproj",
+      "projectName": "Fmarketer.Api",
+      "projectPath": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.Api.csproj",
+      "packagesPath": "C:\\Users\\Ramani Ganason\\.nuget\\packages\\",
+      "outputPath": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\git\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ramani Ganason\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

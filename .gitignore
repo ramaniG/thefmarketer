@@ -164,3 +164,7 @@ typings/
 # next.js build output
 .next
 .mypy_cache/
+*.ide
+*.ide
+*.ide
+thefmarketer-core/thefmarketer/.vs/thefmarketer/v15/Server/sqlite3/storage.ide

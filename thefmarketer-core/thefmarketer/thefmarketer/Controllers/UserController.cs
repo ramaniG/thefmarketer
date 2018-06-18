@@ -16,7 +16,7 @@ namespace thefmarketer.Controllers
 
             if (_context.UserItems.Count() == 0)
             {
-                _context.UserItems.Add(new User { fname = "Item1" });
+                _context.UserItems.Add(new User { FirstName = "Item1" });
                 _context.SaveChanges();
             }
         }
@@ -49,13 +49,13 @@ namespace thefmarketer.Controllers
             _context.UserItems.Add(item);
             _context.SaveChanges();
 
-            return CreatedAtRoute("GetTodo", new { item.id }, item);
+            return CreatedAtRoute("GetTodo", new { item.Id }, item);
         }
 
         [HttpPut("{id}")]
         public IActionResult Update(long id, [FromBody] User item)
         {
-            if (item == null || item.id != id)
+            if (item == null || item.Id != id)
             {
                 return BadRequest();
             }

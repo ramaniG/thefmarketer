@@ -5,11 +5,15 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fmarketer.Api", "thefmarketer\Fmarketer.Api.csproj", "{19C886DD-DD77-4FDA-BBB5-564166F95780}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmarkerter.Base", "Fmarkerter.Base\Fmarkerter.Base.csproj", "{2B320220-5C49-42C7-99E5-62836D25E751}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fmarkerter.Base", "Fmarkerter.Base\Fmarkerter.Base.csproj", "{2B320220-5C49-42C7-99E5-62836D25E751}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmarketer.Email", "Fmarketer.Email\Fmarketer.Email.csproj", "{E7E98DC3-2354-4968-8D58-607AEF9AB7F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fmarketer.Email", "Fmarketer.Email\Fmarketer.Email.csproj", "{E7E98DC3-2354-4968-8D58-607AEF9AB7F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmarketer.Models", "Fmarketer.Models\Fmarketer.Models.csproj", "{BC5B4085-78ED-45F6-BC6F-6DB19FDA0548}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fmarketer.Models", "Fmarketer.Models\Fmarketer.Models.csproj", "{BC5B4085-78ED-45F6-BC6F-6DB19FDA0548}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmarketer.DataAccess", "Fmarketer.DataAccess\Fmarketer.DataAccess.csproj", "{B4B81739-CE85-4FAD-951A-504D090178CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmarketer.Business", "Fmarketer.Business\Fmarketer.Business.csproj", "{98435A63-99C8-4A77-BE43-D899D443EB3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{BC5B4085-78ED-45F6-BC6F-6DB19FDA0548}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC5B4085-78ED-45F6-BC6F-6DB19FDA0548}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC5B4085-78ED-45F6-BC6F-6DB19FDA0548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4B81739-CE85-4FAD-951A-504D090178CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B81739-CE85-4FAD-951A-504D090178CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B81739-CE85-4FAD-951A-504D090178CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B81739-CE85-4FAD-951A-504D090178CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98435A63-99C8-4A77-BE43-D899D443EB3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98435A63-99C8-4A77-BE43-D899D443EB3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98435A63-99C8-4A77-BE43-D899D443EB3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98435A63-99C8-4A77-BE43-D899D443EB3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

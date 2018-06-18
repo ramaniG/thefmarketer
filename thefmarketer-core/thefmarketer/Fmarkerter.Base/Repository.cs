@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fmarkerter.Base
 {
-    public class Repository<TEntity, TPkType> where TEntity : class
+    public class Repository<TEntity, TPkType> where TEntity : BaseEntity<TPkType>
     {
         protected readonly DbContext _context;
         private DbSet<TEntity> _entities;
