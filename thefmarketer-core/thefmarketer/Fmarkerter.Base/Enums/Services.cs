@@ -1,6 +1,6 @@
 ﻿namespace Fmarkerter.Base.Enums
 {
-    public enum Service
+    public enum SERVICES
     {
         FinancialPlanner,
         LifeInsurance,

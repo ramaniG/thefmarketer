@@ -1,6 +1,6 @@
 ﻿namespace Fmarkerter.Base.Enums
 {
-    public enum State
+    public enum STATES
     {
         Johor,
         Kedah,

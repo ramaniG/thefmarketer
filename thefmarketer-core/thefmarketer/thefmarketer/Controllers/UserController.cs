@@ -1,89 +1,77 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models.Model;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using thefmarketer.Models;
+using System.Threading.Tasks;
 
 namespace thefmarketer.Controllers
 {
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private readonly MainDbContext _context;
+        private readonly UserRepository userRepository;
 
-        public UserController(MainDbContext context)
+        public UserController(UserRepository userRepository)
         {
-            _context = context;
-
-            if (_context.UserItems.Count() == 0)
-            {
-                _context.UserItems.Add(new User { FirstName = "Item1" });
-                _context.SaveChanges();
-            }
+            this.userRepository = userRepository;
         }
 
         [HttpGet]
-        public List<User> Get()
+        public async Task<List<User>> GetAsync()
         {
-            return _context.UserItems.ToList();
+            var users = await userRepository.GetAll();
+            return users.ToList();
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(long id)
+        public async Task<IActionResult> GetAsync(string id)
         {
-            var item = _context.UserItems.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return Ok(item);
-        }
-
-        [HttpPost]
-        public IActionResult Create([FromBody] User item)
-        {
-            if (item == null)
-            {
-                return BadRequest();
-            }
-
-            _context.UserItems.Add(item);
-            _context.SaveChanges();
-
-            return CreatedAtRoute("GetTodo", new { item.Id }, item);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] User item)
-        {
-            if (item == null || item.Id != id)
-            {
-                return BadRequest();
-            }
-
-            var user = _context.UserItems.Find(id);
+            var user = await userRepository.Get(new Guid(id));
             if (user == null)
             {
                 return NotFound();
             }
+            return Ok(user);
+        }
 
-            user.Update(item);
-            
-            _context.UserItems.Update(user);
-            _context.SaveChanges();
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] User item)
+        {
+            if (item == null)
+            {
+                return BadRequest();
+            }
+
+            item.Id = new Guid();
+
+            await userRepository.AddAsync(item);
+
+            return Ok(item.Id);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(string id, [FromBody] User item)
+        {
+            if (item == null || item.Id != new Guid(id))
+            {
+                return BadRequest();
+            }
+
+            userRepository.Update(item);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
-            var user = _context.UserItems.Find(id);
+            var user = await userRepository.Get(new Guid(id));
             if (user == null)
             {
                 return NotFound();
             }
-
-            _context.UserItems.Remove(user);
-            _context.SaveChanges();
+            userRepository.Remove(user);
             return NoContent();
         }
     }

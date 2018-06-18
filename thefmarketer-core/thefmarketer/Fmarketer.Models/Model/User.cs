@@ -1,8 +1,4 @@
-﻿using Fmarkerter.Base;
-using Fmarkerter.Base.Enums;
-using System;
-
-namespace Fmarketer.Models
+﻿namespace Fmarketer.Models.Model
 {
     public class User : BaseUser
     {
