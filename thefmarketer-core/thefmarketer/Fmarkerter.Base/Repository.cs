@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fmarkerter.Base
 {
-    public class Repository<TEntity, TPkType> where TEntity : BaseEntity<TPkType>
+    public abstract class Repository<TEntity, TPkType> where TEntity : BaseEntity<TPkType>
     {
         protected readonly DbContext _context;
         private DbSet<TEntity> _entities;
@@ -38,29 +38,49 @@ namespace Fmarkerter.Base
             return _entities.SingleOrDefault(predicate);
         }
 
-        public async Task AddAsync(TEntity entity)
+        public virtual async Task AddAsync(TEntity entity)
         {
+            entity.Created = DateTime.Now;
+            entity.IsDeleted = false;
+            entity.Updated = DateTime.Now;
+
             await _entities.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
+            for (int i = 0; i < entities.Count() ; i++)
+            {
+                entities.ElementAt(i).Created = DateTime.Now;
+                entities.ElementAt(i).IsDeleted = false;
+                entities.ElementAt(i).Updated = DateTime.Now;
+            }
+
             _entities.AddRange(entities);
+            _context.SaveChangesAsync();
         }
 
         public void Remove(TEntity entity)
         {
-            _entities.Remove(entity);
+            entity.IsDeleted = true;
+            Update(entity);
         }
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
-            _entities.RemoveRange(entities);
+            for (int i = 0; i < entities.Count(); i++)
+            {
+                entities.ElementAt(i).IsDeleted = true;
+                Update(entities.ElementAt(i));
+            }
         }
 
         public void Update(TEntity entity)
         {
+            entity.Updated = DateTime.Now;
             _entities.Update(entity);
+            _context.SaveChangesAsync();
         }
     }
 }

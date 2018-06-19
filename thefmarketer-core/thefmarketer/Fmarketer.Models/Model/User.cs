@@ -4,6 +4,5 @@
     {
         public bool ShowEmail { get; set; }
         public bool ShowContact { get; set; }
-        public bool Verified { get; set; }
     }
 }

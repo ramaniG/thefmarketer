@@ -2,8 +2,11 @@
 
 namespace Fmarketer.Models.Model
 {
-    public class Consultant : User
+    public class Consultant : BaseUser
     {
+        public bool ShowEmail { get; set; }
+        public bool ShowContact { get; set; }
+        public bool Verified { get; set; }
         public string Email2 { get; set; }
         public string Contact2 { get; set; }
         public CONTACTOPTS ContactOpt { get; set; }

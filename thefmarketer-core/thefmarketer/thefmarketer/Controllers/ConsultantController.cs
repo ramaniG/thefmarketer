@@ -1,26 +1,26 @@
-﻿using Fmarketer.DataAccess.Repository;
-using Fmarketer.Models.Model;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models.Model;
+using Microsoft.AspNetCore.Mvc;
 
-namespace thefmarketer.Controllers
+namespace Fmarketer.Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
-    public class UserController : Controller
+    [Route("api/Consultant")]
+    public class ConsultantController : Controller
     {
-        private readonly UserRepository repository;
+        private readonly ConsultantRepository repository;
 
-        public UserController(UserRepository repository)
+        public ConsultantController(ConsultantRepository repository)
         {
             this.repository = repository;
         }
 
         [HttpGet]
-        public async Task<List<User>> GetAsync()
+        public async Task<List<Consultant>> GetAsync()
         {
             var users = await repository.GetAll();
             return users.ToList();
@@ -38,7 +38,7 @@ namespace thefmarketer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] User item)
+        public async Task<IActionResult> CreateAsync([FromBody] Consultant item)
         {
             if (item == null)
             {
@@ -53,7 +53,7 @@ namespace thefmarketer.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(string id, [FromBody] User item)
+        public IActionResult Update(string id, [FromBody] Consultant item)
         {
             if (item == null || item.Id != new Guid(id))
             {

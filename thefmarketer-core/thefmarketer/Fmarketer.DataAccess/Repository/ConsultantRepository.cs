@@ -2,21 +2,23 @@
 using Fmarketer.Models;
 using Fmarketer.Models.Model;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Fmarketer.DataAccess.Repository
 {
-    public class UserRepository : Repository<User, Guid>
+    public class ConsultantRepository : Repository<Consultant, Guid>
     {
         private readonly MainContext _dbContext;
 
-        public UserRepository(MainContext dbContext) : base(dbContext)
+        public ConsultantRepository(MainContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public override Task AddAsync(User user)
+        public override Task AddAsync(Consultant user)
         {
             if (FindByEmail(user.Email) != null)
             {
@@ -34,9 +36,9 @@ namespace Fmarketer.DataAccess.Repository
             return base.AddAsync(user);
         }
 
-        public User FindByEmail(string email)
+        public Consultant FindByEmail(string email)
         {
-            return _dbContext.Users.Where(user => user.Email == email && !user.IsDeleted).FirstOrDefault();
+            return _dbContext.Consultants.Where(user => user.Email == email && !user.IsDeleted).FirstOrDefault();
         }
     }
 }
