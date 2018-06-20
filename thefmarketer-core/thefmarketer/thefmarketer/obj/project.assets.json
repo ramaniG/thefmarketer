@@ -13363,23 +13363,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\git\\.nuget\\packages\\": {},
+    "C:\\Users\\Ramani Ganason\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.Api.csproj",
+      "projectUniqueName": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.Api.csproj",
       "projectName": "Fmarketer.Api",
-      "projectPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.Api.csproj",
-      "packagesPath": "C:\\Users\\git\\.nuget\\packages\\",
-      "outputPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\obj\\",
+      "projectPath": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\Fmarketer.Api.csproj",
+      "packagesPath": "C:\\Users\\Ramani Ganason\\.nuget\\packages\\",
+      "outputPath": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\thefmarketer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\git\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ramani Ganason\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -13392,14 +13392,14 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.Business\\Fmarketer.Business.csproj": {
-              "projectPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.Business\\Fmarketer.Business.csproj"
+            "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.Business\\Fmarketer.Business.csproj": {
+              "projectPath": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.Business\\Fmarketer.Business.csproj"
             },
-            "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.DataAccess\\Fmarketer.DataAccess.csproj": {
-              "projectPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.DataAccess\\Fmarketer.DataAccess.csproj"
+            "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.DataAccess\\Fmarketer.DataAccess.csproj": {
+              "projectPath": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.DataAccess\\Fmarketer.DataAccess.csproj"
             },
-            "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.Models\\Fmarketer.Models.csproj": {
-              "projectPath": "D:\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.Models\\Fmarketer.Models.csproj"
+            "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.Models\\Fmarketer.Models.csproj": {
+              "projectPath": "C:\\Freelance\\TheFmarketer\\Source\\thefmarketer\\thefmarketer-core\\thefmarketer\\Fmarketer.Models\\Fmarketer.Models.csproj"
             }
           }
         }

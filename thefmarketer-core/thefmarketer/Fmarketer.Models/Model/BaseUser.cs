@@ -10,5 +10,6 @@ namespace Fmarketer.Models.Model
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Contact { get; set; }
+        public Credential _Credential { get; set; }
     }
 }

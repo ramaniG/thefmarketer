@@ -10,6 +10,7 @@ namespace Fmarketer.Models
         {
         }
 
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Consultant> Consultants { get; set; }
         public DbSet<ConsultantCoverage> Consultantcoverages { get; set; }
