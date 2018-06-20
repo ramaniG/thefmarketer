@@ -1,4 +1,6 @@
-﻿using Fmarketer.DataAccess.Repository;
+﻿using Fmarketer.Business;
+using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models.Dto;
 using Fmarketer.Models.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,68 +14,17 @@ namespace thefmarketer.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private readonly UserRepository repository;
+        UserBusiness userBusiness;
 
-        public UserController(UserRepository repository)
+        public UserController(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository, ConsultantRepository consultantRepository)
         {
-            this.repository = repository;
+            userBusiness = new UserBusiness(credentialRepository, securityTokenRepository, consultantRepository);
         }
 
-        [HttpGet]
-        public async Task<List<User>> GetAsync()
+        [HttpGet("SearchConsultant")]
+        public async Task<IActionResult> SearchConsultant(SearchConsultantDto dto)
         {
-            var users = await repository.GetAll();
-            return users.ToList();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(string id)
-        {
-            var user = await repository.Get(new Guid(id));
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] User item)
-        {
-            if (item == null)
-            {
-                return BadRequest();
-            }
-
-            item.Id = Guid.NewGuid();
-
-            var output = await repository.AddAsync(item);
-
-            return Ok(output);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Update(string id, [FromBody] User item)
-        {
-            if (item == null || item.Id != new Guid(id))
-            {
-                return BadRequest();
-            }
-
-            repository.Update(item);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(string id)
-        {
-            var user = await repository.Get(new Guid(id));
-            if (user == null)
-            {
-                return NotFound();
-            }
-            repository.Remove(user);
-            return NoContent();
+            return Ok(await userBusiness.SearchAsync(dto));
         }
     }
 }

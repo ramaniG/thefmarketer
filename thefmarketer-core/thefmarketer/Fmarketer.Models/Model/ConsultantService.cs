@@ -6,6 +6,7 @@ namespace Fmarketer.Models.Model
 {
     public class ConsultantService : BaseEntity<Guid>
     {
+        public SERVICES Service { get; set; }
         public string Company { get; set; }
         public bool LicenseActive { get; set; }
         public string RegistrationNo { get; set; }

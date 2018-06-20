@@ -1,4 +1,5 @@
 ﻿using Fmarketer.Base.Enums;
+using System.Collections.Generic;
 
 namespace Fmarketer.Models.Model
 {
@@ -10,5 +11,9 @@ namespace Fmarketer.Models.Model
         public string Contact2 { get; set; }
         public CONTACTOPTS ContactOpt { get; set; }
         public CONTACTOPTS ContactOpt2 { get; set; }
+
+        public List<ConsultantCoverage> _Coverage { get; set; }
+        public List<ConsultantService> _Service { get; set; }
+        public List<Request> _Request { get; set; }
     }
 }
