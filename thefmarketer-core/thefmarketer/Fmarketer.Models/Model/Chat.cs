@@ -1,4 +1,4 @@
-﻿using Fmarkerter.Base;
+﻿using Fmarketer.Base;
 using System;
 
 namespace Fmarketer.Models.Model

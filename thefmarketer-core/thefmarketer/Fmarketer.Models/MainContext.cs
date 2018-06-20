@@ -11,21 +11,28 @@ namespace Fmarketer.Models
         }
 
         public DbSet<Admin> Admins { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Chat> Chats { get; set; }
         public DbSet<Consultant> Consultants { get; set; }
         public DbSet<ConsultantCoverage> Consultantcoverages { get; set; }
         public DbSet<ConsultantService> ConsultantServices { get; set; }
+        public DbSet<Credential> Credentials { get; set; }
         public DbSet<Request> Requests { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Chat> Chats { get; set; }
+        public DbSet<SecurityToken> SecurityTokens { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(ConfigureUser);
+            modelBuilder.Entity<Admin>(ConfigureAdmin);
+            modelBuilder.Entity<Chat>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
             modelBuilder.Entity<Consultant>(ConfigureConsultant);
-            modelBuilder.Entity<Request>(ConfigureRequest);
-            modelBuilder.Entity<Review>(ConfigureReview);
-            modelBuilder.Entity<Chat>(ConfigureChat);
+            modelBuilder.Entity<ConsultantCoverage>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+            modelBuilder.Entity<ConsultantService>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+            modelBuilder.Entity<Credential>(ConfigureCredential);
+            modelBuilder.Entity<Request>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+            modelBuilder.Entity<Review>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+            modelBuilder.Entity<SecurityToken>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+            modelBuilder.Entity<User>(ConfigureUser);
         }
 
         private void ConfigureUser(EntityTypeBuilder<User> builder)
@@ -40,19 +47,15 @@ namespace Fmarketer.Models
             builder.HasQueryFilter(x => !x.IsDeleted);
         }
 
-        private static void ConfigureRequest(EntityTypeBuilder<Request> builder)
+        private void ConfigureCredential(EntityTypeBuilder<Credential> builder)
         {
+            builder.HasIndex(p => p.Email).IsUnique();
             builder.HasQueryFilter(x => !x.IsDeleted);
         }
 
-
-        private static void ConfigureReview(EntityTypeBuilder<Review> builder)
+        private void ConfigureAdmin(EntityTypeBuilder<Admin> builder)
         {
-            builder.HasQueryFilter(x => !x.IsDeleted);
-        }
-
-        private static void ConfigureChat(EntityTypeBuilder<Chat> builder)
-        {
+            builder.HasIndex(p => p.Email).IsUnique();
             builder.HasQueryFilter(x => !x.IsDeleted);
         }
     }

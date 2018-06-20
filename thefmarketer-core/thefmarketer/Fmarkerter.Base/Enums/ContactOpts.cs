@@ -1,4 +1,4 @@
-﻿namespace Fmarkerter.Base.Enums
+﻿namespace Fmarketer.Base.Enums
 {
     public enum CONTACTOPTS
     {

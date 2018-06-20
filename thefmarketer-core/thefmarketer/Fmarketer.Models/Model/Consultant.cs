@@ -1,4 +1,4 @@
-﻿using Fmarkerter.Base.Enums;
+﻿using Fmarketer.Base.Enums;
 
 namespace Fmarketer.Models.Model
 {
@@ -6,7 +6,6 @@ namespace Fmarketer.Models.Model
     {
         public bool ShowEmail { get; set; }
         public bool ShowContact { get; set; }
-        public bool Verified { get; set; }
         public string Email2 { get; set; }
         public string Contact2 { get; set; }
         public CONTACTOPTS ContactOpt { get; set; }

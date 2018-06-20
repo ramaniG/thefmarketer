@@ -1,5 +1,5 @@
-﻿using Fmarkerter.Base;
-using Fmarkerter.Base.Enums;
+﻿using Fmarketer.Base;
+using Fmarketer.Base.Enums;
 using System;
 
 namespace Fmarketer.Models.Model

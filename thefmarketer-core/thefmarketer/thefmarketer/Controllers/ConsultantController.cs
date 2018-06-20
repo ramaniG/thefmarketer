@@ -47,9 +47,9 @@ namespace Fmarketer.Api.Controllers
 
             item.Id = Guid.NewGuid();
 
-            await repository.AddAsync(item);
+            var output = await repository.AddAsync(item);
 
-            return Ok(item.Id);
+            return Ok(output);
         }
 
         [HttpPut("{id}")]

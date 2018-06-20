@@ -1,8 +1,6 @@
-﻿using Fmarkerter.Base;
-using Fmarkerter.Base.Enums;
+﻿using Fmarketer.Base;
+using Fmarketer.Base.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Fmarketer.Models.Model
 {

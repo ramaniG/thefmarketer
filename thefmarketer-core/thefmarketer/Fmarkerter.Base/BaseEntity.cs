@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fmarkerter.Base
+namespace Fmarketer.Base
 {
     public abstract class BaseEntity<T>
     {

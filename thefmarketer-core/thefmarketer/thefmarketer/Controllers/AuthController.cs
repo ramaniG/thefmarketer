@@ -8,19 +8,20 @@ namespace Fmarketer.Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/Auth")]
+    [ApiController]
     public class AuthController : Controller
     {
-        private Authentication _authentication;
+        private Authentication authentication;
 
-        public AuthController(UserRepository userRepository)
+        public AuthController(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
         {
-            _authentication = new Authentication(userRepository);
+            authentication = new Authentication(credentialRepository, securityTokenRepository);
         }
 
         [HttpPost("Login")]
-        public IActionResult Login([FromBody]LoginDto value)
+        public async Task<IActionResult> LoginAsync([FromBody]LoginDto dto)
         {
-            var user = _authentication.Login(value);
+            var user = await authentication.LoginByEmailAsync(dto);
 
             if (user == null)
             {
@@ -31,15 +32,9 @@ namespace Fmarketer.Api.Controllers
         }
 
         [HttpPost("Logout")]
-        public IActionResult Logout([FromBody]LoginDto value)
+        public async Task<IActionResult> LogoutAsync([FromBody]LogoutDto dto)
         {
-            var user = _authentication.Login(value);
-
-            if (user == null)
-            {
-                BadRequest("Invalid credential passed");
-            }
-
+            await authentication.LogoutByEmailAsync(dto);
             return Ok();
         }
     }

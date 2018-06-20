@@ -29,10 +29,18 @@ namespace thefmarketer
                     .AllowCredentials());
             });
 
-            //services.AddDbContext<MainDbContext>(opt => opt.UseInMemoryDatabase("TheFmarketer"));
             services.AddDbContext<MainContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
 
+            services.AddScoped<AdminRepository, AdminRepository>();
+            services.AddScoped<ChatRepository, ChatRepository>();
+            services.AddScoped<ConsultantCoverageRepository, ConsultantCoverageRepository>();
+            services.AddScoped<ConsultantRepository, ConsultantRepository>();
+            services.AddScoped<ConsultantServiceRepository, ConsultantServiceRepository>();
+            services.AddScoped<CredentialRepository, CredentialRepository>();
+            services.AddScoped<RequestRepository, RequestRepository>();
+            services.AddScoped<ReviewRepository, ReviewRepository>();
+            services.AddScoped<SecurityTokenRepository, SecurityTokenRepository>();
             services.AddScoped<UserRepository, UserRepository>();
         }
 

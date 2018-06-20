@@ -1,4 +1,4 @@
-﻿using Fmarkerter.Base;
+﻿using Fmarketer.Base;
 using Fmarketer.Models;
 using Fmarketer.Models.Model;
 using System;
@@ -16,20 +16,14 @@ namespace Fmarketer.DataAccess.Repository
             _dbContext = dbContext;
         }
 
-        public override Task AddAsync(User user)
+        public override Task<User> AddAsync(User user)
         {
+            user.Id = Guid.NewGuid();
+
             if (FindByEmail(user.Email) != null)
             {
                 throw new InvalidOperationException("User with the same email already exist.");
             }
-
-            if (string.IsNullOrEmpty(user.Password))
-            {
-                throw new InvalidOperationException("Password must not be empty.");
-            }
-
-            user.Salt = BCrypt.BCryptHelper.GenerateSalt();
-            user.Password = BCrypt.BCryptHelper.HashPassword(user.Password, user.Salt);
 
             return base.AddAsync(user);
         }

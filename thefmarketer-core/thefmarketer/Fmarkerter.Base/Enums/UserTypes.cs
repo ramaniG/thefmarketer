@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Fmarkerter.Base.Enums
+namespace Fmarketer.Base.Enums
 {
     public enum USERTYPES
     {

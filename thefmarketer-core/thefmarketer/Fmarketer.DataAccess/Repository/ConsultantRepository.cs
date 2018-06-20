@@ -1,10 +1,8 @@
-﻿using Fmarkerter.Base;
+﻿using Fmarketer.Base;
 using Fmarketer.Models;
 using Fmarketer.Models.Model;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Fmarketer.DataAccess.Repository
@@ -18,27 +16,21 @@ namespace Fmarketer.DataAccess.Repository
             _dbContext = dbContext;
         }
 
-        public override Task AddAsync(Consultant user)
+        public override Task<Consultant> AddAsync(Consultant consultant)
         {
-            if (FindByEmail(user.Email) != null)
+            consultant.Id = Guid.NewGuid();
+
+            if (FindByEmail(consultant.Email) != null)
             {
                 throw new InvalidOperationException("User with the same email already exist.");
             }
 
-            if (string.IsNullOrEmpty(user.Password))
-            {
-                throw new InvalidOperationException("Password must not be empty.");
-            }
-
-            user.Salt = BCrypt.BCryptHelper.GenerateSalt();
-            user.Password = BCrypt.BCryptHelper.HashPassword(user.Password, user.Salt);
-
-            return base.AddAsync(user);
+            return base.AddAsync(consultant);
         }
 
         public Consultant FindByEmail(string email)
         {
-            return _dbContext.Consultants.Where(user => user.Email == email && !user.IsDeleted).FirstOrDefault();
+            return _dbContext.Consultants.Where(consultant => consultant.Email == email && !consultant.IsDeleted).FirstOrDefault();
         }
     }
 }

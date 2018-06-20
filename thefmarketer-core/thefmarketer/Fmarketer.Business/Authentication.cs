@@ -1,34 +1,65 @@
-﻿using Fmarketer.DataAccess.Repository;
+﻿using Fmarketer.Base;
+using Fmarketer.Base.Enums;
+using Fmarketer.DataAccess.Repository;
 using Fmarketer.Models.Dto;
 using Fmarketer.Models.Model;
 using System;
+using System.Threading.Tasks;
 
 namespace Fmarketer.Business
 {
     public class Authentication
     {
-        UserRepository _userRepository;
+        CredentialRepository credentialRepository;
+        SecurityTokenRepository securityTokenRepository;
 
-        public Authentication(UserRepository userRepository)
+        public Authentication(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
         {
-            _userRepository = userRepository;
+            this.credentialRepository = credentialRepository;
+            this.securityTokenRepository = securityTokenRepository;
         }
 
-        public User Login(LoginDto loginDto)
+        public async Task<LoginOutDto> LoginByEmailAsync(LoginDto dto)
         {
-            var user = _userRepository.FindByEmail(loginDto.Email);
+            var credential = credentialRepository.FindByEmail(dto.Email);
 
-            if (user != null)
-            {
-                if (BCrypt.BCryptHelper.CheckPassword(loginDto.Password, user.Password))
-                {
-                    user.LastLogin = DateTime.Now;
-                    _userRepository.Update(user);
-                    return user;
+            if (credential != null && credential.AuthType == AUTHTYPES.Email && credential.CredentialState == CREDENTIALSTATUS.Active && credential.Verified) {
+                if (BCrypt.BCryptHelper.CheckPassword(dto.Password, credential.Password)) {
+                    credential.LastLogin = DateTime.Now;
+                    credentialRepository.Update(credential);
+
+                    var token = await CreateSecurityTokenAsync(credential);
+
+                    return new LoginOutDto(credential, token);
                 }
             }
 
-            return null;
+            throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
+        }
+
+        public async Task LogoutByEmailAsync(LogoutDto dto)
+        {
+            var token = await securityTokenRepository.Get(new Guid(dto.Token));
+
+            if (token != null) {
+                token.ExpiryTime = DateTime.Now;
+
+                securityTokenRepository.Update(token);
+            }
+
+            throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
+        }
+
+        private async Task<SecurityToken> CreateSecurityTokenAsync(Credential credential)
+        {
+            var token = new SecurityToken() {
+                Id = Guid.NewGuid(),
+                AuthenticatedTime = credential.LastLogin,
+                ExpiryTime = credential.LastLogin.AddMinutes(15), // TODO: Change Minutes to setting file
+                _Credential = credential
+            };
+
+            return await securityTokenRepository.AddAsync(token);
         }
     }
 }

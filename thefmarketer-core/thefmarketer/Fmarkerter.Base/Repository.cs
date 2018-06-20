@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Fmarkerter.Base
+namespace Fmarketer.Base
 {
     public abstract class Repository<TEntity, TPkType> where TEntity : BaseEntity<TPkType>
     {
@@ -38,7 +38,7 @@ namespace Fmarkerter.Base
             return _entities.SingleOrDefault(predicate);
         }
 
-        public virtual async Task AddAsync(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
             entity.Created = DateTime.Now;
             entity.IsDeleted = false;
@@ -46,6 +46,8 @@ namespace Fmarkerter.Base
 
             await _entities.AddAsync(entity);
             await _context.SaveChangesAsync();
+
+            return _entities.Find(entity.Id);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
@@ -76,7 +78,7 @@ namespace Fmarkerter.Base
             }
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             entity.Updated = DateTime.Now;
             _entities.Update(entity);
