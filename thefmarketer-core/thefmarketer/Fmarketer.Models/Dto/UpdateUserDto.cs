@@ -1,4 +1,5 @@
 ﻿using Fmarketer.Base.Enums;
+using System.Collections.Generic;
 
 namespace Fmarketer.Models.Dto
 {
@@ -19,5 +20,7 @@ namespace Fmarketer.Models.Dto
         public CREDENTIALSTATUS? CredentialState { get; set; }
         public int? NumberOfTry { get; set; }
         public bool? Verified { get; set; }
+        public List<STATES> States { get; set; }
+        public List<SERVICES> Services { get; set; }
     }
 }

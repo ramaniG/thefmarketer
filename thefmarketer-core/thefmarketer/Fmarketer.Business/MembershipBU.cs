@@ -10,15 +10,16 @@ using System.Threading.Tasks;
 
 namespace Fmarketer.Business
 {
-    public class UserManagement
+    public class MembershipBU
     {
         CredentialRepository credentialRepository;
         UserRepository userRepository;
         AdminRepository adminRepository;
         ConsultantRepository consultantRepository;
         SecurityTokenRepository securityTokenRepository;
+        SecurityTokenBU securityTokenBU;
 
-        public UserManagement(CredentialRepository credentialRepository, UserRepository userRepository, AdminRepository adminRepository, 
+        public MembershipBU(CredentialRepository credentialRepository, UserRepository userRepository, AdminRepository adminRepository, 
             ConsultantRepository consultantRepository, SecurityTokenRepository securityTokenRepository)
         {
             this.credentialRepository = credentialRepository;
@@ -26,6 +27,8 @@ namespace Fmarketer.Business
             this.adminRepository = adminRepository;
             this.consultantRepository = consultantRepository;
             this.securityTokenRepository = securityTokenRepository;
+
+            securityTokenBU = new SecurityTokenBU(this.securityTokenRepository);
         }
 
         public async Task<AddUserOutputDto> AddUserAsync(AddUserDto dto)
@@ -64,7 +67,7 @@ namespace Fmarketer.Business
         public async Task UpdateUserAsync(UpdateUserDto dto)
         {
             // Check Credential
-            var credential = await CheckTokenAsync(dto.Token);
+            var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
 
             if (credential == null) {
                 throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
@@ -86,7 +89,7 @@ namespace Fmarketer.Business
         public async Task DeleteUserAsync(DeleteUserDto dto)
         {
             // Check Credential
-            var credential = await CheckTokenAsync(dto.Token);
+            var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
 
             if (credential == null) {
                 throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
@@ -107,7 +110,7 @@ namespace Fmarketer.Business
         public async Task<GetUserOutputDto> GetUsersAsync(GetUserDto dto)
         {
             // Check Credential
-            var credential = await CheckTokenAsync(dto.Token);
+            var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
 
             if (credential == null) {
                 throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
@@ -187,18 +190,7 @@ namespace Fmarketer.Business
 
             return await consultantRepository.AddAsync(consultant);
         }
-
-        private async Task<Credential> CheckTokenAsync(string token)
-        {
-            var secToken = await securityTokenRepository.CheckAndUpdateAsync(new Guid(token));
-
-            if (secToken == null) {
-                throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
-            }
-
-            return secToken._Credential;
-        }
-
+        
         private async Task UpdateUserForNormalAsync(UpdateUserDto dto)
         {
             var credential = await credentialRepository.Get(new Guid(dto.Id));

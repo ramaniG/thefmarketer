@@ -1,11 +1,7 @@
 ﻿using Fmarketer.Business;
 using Fmarketer.DataAccess.Repository;
 using Fmarketer.Models.Dto;
-using Fmarketer.Models.Model;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace thefmarketer.Controllers
@@ -14,17 +10,52 @@ namespace thefmarketer.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        UserBusiness userBusiness;
+        UserBU userBU;
 
-        public UserController(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository, ConsultantRepository consultantRepository)
+        public UserController(SecurityTokenRepository securityToken, ConsultantRepository consultant,
+            RequestRepository request, ReviewRepository review, ChatRepository chat)
         {
-            userBusiness = new UserBusiness(credentialRepository, securityTokenRepository, consultantRepository);
+            userBU = new UserBU(securityToken, consultant, request, review, chat);
         }
 
-        [HttpGet("SearchConsultant")]
-        public async Task<IActionResult> SearchConsultant(SearchConsultantDto dto)
+        [HttpPost("SearchConsultant")]
+        public async Task<IActionResult> SearchConsultant([FromBody]SearchConsultantDto dto)
         {
-            return Ok(await userBusiness.SearchAsync(dto));
+            return Ok(await userBU.SearchConsultantAsync(dto));
+        }
+
+        [HttpPost("SearchRequest")]
+        public async Task<IActionResult> SearchRequest([FromBody]SearchRequestDto dto)
+        {
+            return Ok(await userBU.SearchRequestAsync(dto));
+        }
+
+        [HttpPost("CreateRequest")]
+        public async Task<IActionResult> CreateRequest([FromBody]CreateRequestDto dto)
+        {
+            await userBU.CreateRequestAsync(dto);
+            return Ok();
+        }
+
+        [HttpPost("UpdateRequest")]
+        public async Task<IActionResult> UpdateRequest([FromBody]UpdateRequestDto dto)
+        {
+            await userBU.UpdateRequestAsync(dto);
+            return Ok();
+        }
+
+        [HttpPost("CompleteRequest")]
+        public async Task<IActionResult> CompleteRequest([FromBody]CompleteRequestDto dto)
+        {
+            await userBU.CompleteRequestAsync(dto);
+            return Ok();
+        }
+
+        [HttpPost("SendChat")]
+        public async Task<IActionResult> SendChat([FromBody]SendChatDto dto)
+        {
+            await userBU.SendChatAsync(dto);
+            return Ok();
         }
     }
 }

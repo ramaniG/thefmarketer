@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Fmarketer.Business
 {
-    public class Authentication
+    public class AuthenticationBU
     {
         CredentialRepository credentialRepository;
         SecurityTokenRepository securityTokenRepository;
 
-        public Authentication(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
+        public AuthenticationBU(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
         {
             this.credentialRepository = credentialRepository;
             this.securityTokenRepository = securityTokenRepository;

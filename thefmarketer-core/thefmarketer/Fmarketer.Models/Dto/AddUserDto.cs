@@ -1,4 +1,5 @@
 ﻿using Fmarketer.Base.Enums;
+using System.Collections.Generic;
 
 namespace Fmarketer.Models.Dto
 {

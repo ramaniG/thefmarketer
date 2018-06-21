@@ -11,11 +11,11 @@ namespace Fmarketer.Api.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        private Authentication authentication;
+        private AuthenticationBU authentication;
 
         public AuthController(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
         {
-            authentication = new Authentication(credentialRepository, securityTokenRepository);
+            authentication = new AuthenticationBU(credentialRepository, securityTokenRepository);
         }
 
         [HttpPost("Login")]

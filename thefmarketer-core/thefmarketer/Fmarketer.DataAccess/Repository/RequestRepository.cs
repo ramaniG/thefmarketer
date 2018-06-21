@@ -18,6 +18,8 @@ namespace Fmarketer.DataAccess.Repository
         public override Task<Request> AddAsync(Request request)
         {
             request.Id = Guid.NewGuid();
+            request.IsActive = true;
+            request.IsCompleted = false;
             return base.AddAsync(request);
         }
     }
