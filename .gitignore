@@ -168,3 +168,5 @@ typings/
 *.ide
 *.ide
 thefmarketer-core/thefmarketer/.vs/thefmarketer/v15/Server/sqlite3/storage.ide
+thefmarketer-core/thefmarketer/.vs/thefmarketer/v15/Server/sqlite3/storage.ide
+thefmarketer-core/thefmarketer/thefmarketer/obj/project.assets.json
