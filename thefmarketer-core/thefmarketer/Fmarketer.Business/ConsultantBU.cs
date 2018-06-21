@@ -48,7 +48,7 @@ namespace Fmarketer.Business
 
         public SearchRequestOutputDto SearchRequest(SearchRequestDto dto)
         {
-
+            return null;
         }
     }
 }
