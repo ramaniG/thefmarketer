@@ -2,15 +2,14 @@
 
 namespace Fmarketer.Models.Dto
 {
-    public class AddUserOutputDto
+    public class CredentialUserDto
     {
         public Credential Credential { get; set; }
-
         public Admin Admin { get; set; }
         public Consultant Consultant { get; set; }
         public User User { get; set; }
 
-        public AddUserOutputDto(Credential credential, BaseUser user)
+        public CredentialUserDto(Credential credential, BaseUser user)
         {
             Credential = credential;
             switch (credential.UserType) {

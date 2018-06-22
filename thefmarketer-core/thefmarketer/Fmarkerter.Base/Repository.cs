@@ -10,7 +10,7 @@ namespace Fmarketer.Base
     public abstract class Repository<TEntity, TPkType> where TEntity : BaseEntity<TPkType>
     {
         protected readonly DbContext _context;
-        private DbSet<TEntity> _entities;
+        protected DbSet<TEntity> _entities;
 
         public Repository(DbContext context)
         {

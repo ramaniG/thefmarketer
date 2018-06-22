@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fmarketer.Business;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models.Dto;
 using Fmarketer.Models.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,68 +14,53 @@ namespace Fmarketer.Api.Controllers
     [Route("api/Consultant")]
     public class ConsultantController : Controller
     {
-        private readonly ConsultantRepository repository;
+        ConsultantBU consultantBU;
 
-        public ConsultantController(ConsultantRepository repository)
+        public ConsultantController(SecurityTokenRepository securityToken, ConsultantRepository consultant, ConsultantCoverageRepository coverage, 
+            ConsultantServiceRepository service, RequestRepository request, ChatRepository chat)
         {
-            this.repository = repository;
+            consultantBU = new ConsultantBU(securityToken, consultant, coverage, service, request, chat);
         }
 
-        [HttpGet]
-        public async Task<List<Consultant>> GetAsync()
+        [HttpPost("SearchRequest")]
+        public async Task<IActionResult> SearchRequest([FromBody]SearchRequestDto dto)
         {
-            var users = await repository.GetAll();
-            return users.ToList();
+            return Ok(await consultantBU.SearchRequestAsync(dto));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(string id)
+        [HttpPost("State")]
+        public async Task<IActionResult> AddState([FromBody]AddStateDto dto)
         {
-            var user = await repository.Get(new Guid(id));
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user);
+            await consultantBU.AddStateAsync(dto);
+            return Ok();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] Consultant item)
+        [HttpPost("Service")]
+        public async Task<IActionResult> AddService([FromBody]AddServiceDto dto)
         {
-            if (item == null)
-            {
-                return BadRequest();
-            }
-
-            item.Id = Guid.NewGuid();
-
-            var output = await repository.AddAsync(item);
-
-            return Ok(output);
+            await consultantBU.AddServiceAsync(dto);
+            return Ok();
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(string id, [FromBody] Consultant item)
+        [HttpPut("State")]
+        public async Task<IActionResult> UpdateState([FromBody]UpdateStateDto dto)
         {
-            if (item == null || item.Id != new Guid(id))
-            {
-                return BadRequest();
-            }
-
-            repository.Update(item);
-            return NoContent();
+            await consultantBU.UpdateStateAsync(dto);
+            return Ok();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(string id)
+        [HttpPut("Service")]
+        public async Task<IActionResult> UpdateService([FromBody]UpdateServiceDto dto)
         {
-            var user = await repository.Get(new Guid(id));
-            if (user == null)
-            {
-                return NotFound();
-            }
-            repository.Remove(user);
-            return NoContent();
+            await consultantBU.UpdateServiceAsync(dto);
+            return Ok();
+        }
+
+        [HttpPost("SendChat")]
+        public async Task<IActionResult> SendChat([FromBody]SendChatDto dto)
+        {
+            await consultantBU.SendChatAsync(dto);
+            return Ok();
         }
     }
 }

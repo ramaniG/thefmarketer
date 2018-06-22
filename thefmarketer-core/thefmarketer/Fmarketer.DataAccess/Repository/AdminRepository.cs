@@ -2,6 +2,7 @@
 using Fmarketer.Models;
 using Fmarketer.Models.Model;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Fmarketer.DataAccess.Repository
@@ -19,6 +20,16 @@ namespace Fmarketer.DataAccess.Repository
         {
             admin.Id = Guid.NewGuid();
             return base.AddAsync(admin);
+        }
+
+        public Admin FindByEmail(string email)
+        {
+            return _dbContext.Admins.Where(admin => admin.Email == email && !admin.IsDeleted).FirstOrDefault();
+        }
+
+        public Admin FindByCredential(Guid id)
+        {
+            return _dbContext.Admins.Where(admin => admin._Credential.Id == id && !admin.IsDeleted).FirstOrDefault();
         }
     }
 }

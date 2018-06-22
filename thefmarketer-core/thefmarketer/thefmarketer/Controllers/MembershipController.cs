@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Fmarketer.Base;
 using Fmarketer.Business;
 using Fmarketer.DataAccess.Repository;
 using Fmarketer.Models.Dto;
@@ -19,9 +20,10 @@ namespace Fmarketer.Api.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetAsync(GetUserDto dto)
+        public async Task<IActionResult> GetAsync()
         {
-            return Ok(await membershipBU.GetUsersAsync(dto));
+            var token = Helper.GetTokenFromRequest(HttpContext.Request);
+            return Ok(await membershipBU.GetUsersAsync(new GetUserDto(token)));
         }
 
 

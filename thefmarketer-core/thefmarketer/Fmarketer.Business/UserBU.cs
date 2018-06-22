@@ -21,7 +21,7 @@ namespace Fmarketer.Business
         SecurityTokenBU securityTokenBU;
 
         public UserBU(SecurityTokenRepository securityToken, ConsultantRepository consultant, 
-            RequestRepository request, ReviewRepository review, ChatRepository chat)
+            RequestRepository request, ReviewRepository review, ChatRepository chat, UserRepository user)
         {
             securityTokenRepository = securityToken;
             consultantRepository = consultant;
@@ -29,7 +29,7 @@ namespace Fmarketer.Business
             reviewRepository = review;
             chatRepository = chat;
 
-            securityTokenBU = new SecurityTokenBU(securityTokenRepository);
+            securityTokenBU = new SecurityTokenBU(securityTokenRepository, user, null, null);
         }
 
         public async Task<SearchConsultantOutputDto> SearchConsultantAsync(SearchConsultantDto dto)
@@ -41,8 +41,8 @@ namespace Fmarketer.Business
                 ((c.FirstName + " " + c.LastName).Contains(dto.Name) || string.IsNullOrEmpty(dto.Name)) &&
                 c._Coverages.Any(v => v.State == dto.State.Value || !dto.State.HasValue) &&
                 c._Services.Any(s => s.Service == dto.Service.Value || !dto.Service.HasValue) &&
-                (c._Request.Average(r => r._Review.Star) >= dto.MinRating.Value || !dto.MinRating.HasValue) &&
-                (c._Request.Average(r => r._Review.Star) <= dto.MaxRating.Value || !dto.MaxRating.HasValue));
+                (c._Requests.Average(r => r._Review.Star) >= dto.MinRating.Value || !dto.MinRating.HasValue) &&
+                (c._Requests.Average(r => r._Review.Star) <= dto.MaxRating.Value || !dto.MaxRating.HasValue));
 
             return new SearchConsultantOutputDto(consultants.ToList());
         }
@@ -52,14 +52,9 @@ namespace Fmarketer.Business
             // Check Credential
             var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
 
-            if (credential.UserType == USERTYPES.User) {
-                var user = credential._User;
+            if (credential.Credential.UserType == USERTYPES.User) {
+                var user = credential.User;
                 var requests = user._Requests.FindAll(r => (r.Service == dto.Service.Value || !dto.Service.HasValue) &&
-                    ((r._Consultant.FirstName + "" + r._Consultant.LastName).Contains(dto.Name) || string.IsNullOrEmpty(dto.Name))).OrderBy(x => x.Updated);
-
-                return new SearchRequestOutputDto(requests.ToList());
-            } else if (credential.UserType == USERTYPES.Admin) {
-                var requests = requestRepository.Find(r => (r.Service == dto.Service.Value || !dto.Service.HasValue) &&
                     ((r._Consultant.FirstName + "" + r._Consultant.LastName).Contains(dto.Name) || string.IsNullOrEmpty(dto.Name))).OrderBy(x => x.Updated);
 
                 return new SearchRequestOutputDto(requests.ToList());
@@ -74,11 +69,11 @@ namespace Fmarketer.Business
             var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
             var consultant = await consultantRepository.Get(new Guid(dto.ConsultantId));
 
-            if (credential.UserType == USERTYPES.User) {
+            if (credential.Credential.UserType == USERTYPES.User) {
                 var request = new Request() {
                     Message = dto.Message,
                     Service = dto.Service,
-                    _User = credential._User,
+                    _User = credential.User,
                     _Consultant = consultant
                 };
 
@@ -94,7 +89,7 @@ namespace Fmarketer.Business
             var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
             var request = await requestRepository.Get(new Guid(dto.RequestId));
 
-            if (credential.UserType == USERTYPES.User) {
+            if (credential.Credential.UserType == USERTYPES.User) {
                 var chat = new Chat() {
                     Message = dto.Message,
                     IsRead = false,
@@ -118,7 +113,7 @@ namespace Fmarketer.Business
             var request = await requestRepository.Get(new Guid(dto.RequestId));
 
             if (request != null) {
-                if ((credential.UserType == USERTYPES.User && credential._User == request._User) || (credential.UserType == USERTYPES.Admin)) {
+                if (credential.Credential.UserType == USERTYPES.User && credential.User == request._User) {
                     if(!request.IsCompleted) {
                         request.IsActive = dto.IsActive ?? request.IsActive;
                         requestRepository.Update(request);
@@ -135,7 +130,7 @@ namespace Fmarketer.Business
             var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
             var request = await requestRepository.Get(new Guid(dto.RequestId));
 
-            if (credential.UserType == USERTYPES.User) {
+            if (credential.Credential.UserType == USERTYPES.User) {
                 var review = new Review() {
                     IsPublic = dto.IsPublic,
                     Message = dto.Message,

@@ -14,6 +14,6 @@ namespace Fmarketer.Models.Model
 
         public List<ConsultantCoverage> _Coverages { get; set; }
         public List<ConsultantService> _Services { get; set; }
-        public List<Request> _Request { get; set; }
+        public List<Request> _Requests { get; set; }
     }
 }

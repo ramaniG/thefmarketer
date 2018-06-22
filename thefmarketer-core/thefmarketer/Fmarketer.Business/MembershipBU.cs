@@ -19,16 +19,15 @@ namespace Fmarketer.Business
         SecurityTokenRepository securityTokenRepository;
         SecurityTokenBU securityTokenBU;
 
-        public MembershipBU(CredentialRepository credentialRepository, UserRepository userRepository, AdminRepository adminRepository, 
-            ConsultantRepository consultantRepository, SecurityTokenRepository securityTokenRepository)
+        public MembershipBU(CredentialRepository credential, UserRepository user, AdminRepository admin, ConsultantRepository consultant, SecurityTokenRepository securityToken)
         {
-            this.credentialRepository = credentialRepository;
-            this.userRepository = userRepository;
-            this.adminRepository = adminRepository;
-            this.consultantRepository = consultantRepository;
-            this.securityTokenRepository = securityTokenRepository;
+            this.credentialRepository = credential;
+            this.userRepository = user;
+            this.adminRepository = admin;
+            this.consultantRepository = consultant;
+            this.securityTokenRepository = securityToken;
 
-            securityTokenBU = new SecurityTokenBU(this.securityTokenRepository);
+            securityTokenBU = new SecurityTokenBU(this.securityTokenRepository, user, consultant, admin);
         }
 
         public async Task<AddUserOutputDto> AddUserAsync(AddUserDto dto)
@@ -42,26 +41,20 @@ namespace Fmarketer.Business
             switch (dto.UserType) {
                 case USERTYPES.User:
                     var user = await CreateUserAsync(dto, credential);
-                    credential._User = user;
-                    break;
+                    return new AddUserOutputDto(credential, user);
                 case USERTYPES.Consultant:
                     var consultant = await CreateConsultantAsync(dto, credential);
-                    credential._Consultant = consultant;
-                    break;
+                    return new AddUserOutputDto(credential, consultant);
                 case USERTYPES.Admin:
                     var admin = await CreateAdminAsync(dto, credential);
-                    credential._Admin = admin;
-                    break;
+                    return new AddUserOutputDto(credential, admin);
                 case USERTYPES.SuperAdmin:
                     break;
                 default:
                     break;
             }
 
-            // Update Credential
-            credentialRepository.Update(credential);
-
-            return new AddUserOutputDto(credential);
+            return null;
         }
 
         public async Task UpdateUserAsync(UpdateUserDto dto)
@@ -74,11 +67,11 @@ namespace Fmarketer.Business
             }
 
             // Check permission to update
-            if (credential.UserType == USERTYPES.Admin || credential.UserType == USERTYPES.SuperAdmin) {
+            if (credential.Credential.UserType == USERTYPES.Admin || credential.Credential.UserType == USERTYPES.SuperAdmin) {
                 // Admin can update any user
                 await UpdateUserForAdminAsync(dto); 
             }
-            else if (credential.Id.Equals(new Guid(dto.Id))) {
+            else if (credential.Credential.Id.Equals(new Guid(dto.Id))) {
                 // Only can update if same user as logged in
                 await UpdateUserForNormalAsync(dto);
             }
@@ -96,10 +89,10 @@ namespace Fmarketer.Business
             }
 
             // Check permission to update
-            if (credential.UserType == USERTYPES.Admin || credential.UserType == USERTYPES.SuperAdmin) {
+            if (credential.Credential.UserType == USERTYPES.Admin || credential.Credential.UserType == USERTYPES.SuperAdmin) {
                 // Admin can update any user
                 await DeleteAsync(new Guid(dto.Id));
-            } else if (credential.Id.Equals(new Guid(dto.Id))) {
+            } else if (credential.Credential.Id.Equals(new Guid(dto.Id))) {
                 // Only can update if same user as logged in
                 await DeleteAsync(new Guid(dto.Id));
             }
@@ -117,7 +110,7 @@ namespace Fmarketer.Business
             }
 
             // Check permission to update
-            if (credential.UserType == USERTYPES.Admin || credential.UserType == USERTYPES.SuperAdmin) {
+            if (credential.Credential.UserType == USERTYPES.Admin || credential.Credential.UserType == USERTYPES.SuperAdmin) {
                 // Admin can update any user
                 var user = await credentialRepository.GetAll();
 
@@ -206,13 +199,13 @@ namespace Fmarketer.Business
             // Update User
             switch (credential.UserType) {
                 case USERTYPES.User:
-                    await UpdateUser(dto, credential._User.Id);
+                    UpdateUser(dto, credential.Id);
                     break;
                 case USERTYPES.Consultant:
-                    await UpdateConsultant(dto, credential._Consultant.Id);
+                    UpdateConsultant(dto, credential.Id);
                     break;
                 case USERTYPES.Admin:
-                    await UpdateAdmin(dto, credential._Admin.Id);
+                    UpdateAdmin(dto, credential.Id);
                     break;
                 case USERTYPES.SuperAdmin:
                     break;
@@ -239,13 +232,13 @@ namespace Fmarketer.Business
             // Update User
             switch (credential.UserType) {
                 case USERTYPES.User:
-                    await UpdateUser(dto, credential._User.Id);
+                    UpdateUser(dto, credential.Id);
                     break;
                 case USERTYPES.Consultant:
-                    await UpdateConsultant(dto, credential._Consultant.Id);
+                    UpdateConsultant(dto, credential.Id);
                     break;
                 case USERTYPES.Admin:
-                    await UpdateAdmin(dto, credential._Admin.Id);
+                    UpdateAdmin(dto, credential.Id);
                     break;
                 case USERTYPES.SuperAdmin:
                     break;
@@ -254,9 +247,9 @@ namespace Fmarketer.Business
             }
         }
 
-        private async Task UpdateUser(UpdateUserDto dto, Guid Id)
+        private void UpdateUser(UpdateUserDto dto, Guid Id)
         {
-            var user = await userRepository.Get(Id);
+            var user = userRepository.FindByCredential(Id);
 
             user.Contact = (!string.IsNullOrEmpty(dto.Contact)) ? dto.Contact : user.Contact;
             user.FirstName = (!string.IsNullOrEmpty(dto.FirstName)) ? dto.FirstName : user.FirstName;
@@ -267,9 +260,9 @@ namespace Fmarketer.Business
             userRepository.Update(user);
         }
 
-        private async Task UpdateAdmin(UpdateUserDto dto, Guid Id)
+        private void UpdateAdmin(UpdateUserDto dto, Guid Id)
         {
-            var admin = await adminRepository.Get(Id);
+            var admin = adminRepository.FindByCredential(Id);
 
             admin.Contact = (!string.IsNullOrEmpty(dto.Contact)) ? dto.Contact : admin.Contact;
             admin.FirstName = (!string.IsNullOrEmpty(dto.FirstName)) ? dto.FirstName : admin.FirstName;
@@ -278,9 +271,9 @@ namespace Fmarketer.Business
             adminRepository.Update(admin);
         }
 
-        private async Task UpdateConsultant(UpdateUserDto dto, Guid Id)
+        private void UpdateConsultant(UpdateUserDto dto, Guid Id)
         {
-            var consultant = await consultantRepository.Get(Id);
+            var consultant = consultantRepository.FindByCredential(Id);
 
             consultant.Contact = (!string.IsNullOrEmpty(dto.Contact)) ? dto.Contact : consultant.Contact;
             consultant.Contact2 = (!string.IsNullOrEmpty(dto.Contact2)) ? dto.Contact2 : consultant.Contact2;
@@ -304,13 +297,16 @@ namespace Fmarketer.Business
             // Delete User
             switch (credential.UserType) {
                 case USERTYPES.User:
-                    userRepository.Remove(credential._User);
+                    var user = userRepository.FindByCredential(credential.Id);
+                    userRepository.Remove(user);
                     break;
                 case USERTYPES.Consultant:
-                    consultantRepository.Remove(credential._Consultant);
+                    var cons = consultantRepository.FindByCredential(credential.Id);
+                    consultantRepository.Remove(cons);
                     break;
                 case USERTYPES.Admin:
-                    adminRepository.Remove(credential._Admin);
+                    var admin = adminRepository.FindByCredential(credential.Id);
+                    adminRepository.Remove(admin);
                     break;
                 case USERTYPES.SuperAdmin:
                     break;

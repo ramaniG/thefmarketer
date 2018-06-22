@@ -4,14 +4,16 @@ using Fmarketer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fmarketer.Models.Migrations
 {
     [DbContext(typeof(MainContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20180622050929_FixedMapping")]
+    partial class FixedMapping
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,15 +40,11 @@ namespace Fmarketer.Models.Migrations
 
                     b.Property<DateTime>("Updated");
 
-                    b.Property<Guid?>("_CredentialId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
-
-                    b.HasIndex("_CredentialId");
 
                     b.ToTable("Admins");
                 });
@@ -110,15 +108,11 @@ namespace Fmarketer.Models.Migrations
 
                     b.Property<DateTime>("Updated");
 
-                    b.Property<Guid?>("_CredentialId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
-
-                    b.HasIndex("_CredentialId");
 
                     b.ToTable("Consultants");
                 });
@@ -212,11 +206,26 @@ namespace Fmarketer.Models.Migrations
 
                     b.Property<bool>("Verified");
 
+                    b.Property<Guid>("_AdminId");
+
+                    b.Property<Guid>("_ConsultandId");
+
+                    b.Property<Guid>("_UserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("_AdminId")
+                        .IsUnique();
+
+                    b.HasIndex("_ConsultandId")
+                        .IsUnique();
+
+                    b.HasIndex("_UserId")
+                        .IsUnique();
 
                     b.ToTable("Credentials");
                 });
@@ -326,24 +335,13 @@ namespace Fmarketer.Models.Migrations
 
                     b.Property<DateTime>("Updated");
 
-                    b.Property<Guid?>("_CredentialId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
 
-                    b.HasIndex("_CredentialId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Fmarketer.Models.Model.Admin", b =>
-                {
-                    b.HasOne("Fmarketer.Models.Model.Credential", "_Credential")
-                        .WithMany()
-                        .HasForeignKey("_CredentialId");
                 });
 
             modelBuilder.Entity("Fmarketer.Models.Model.Chat", b =>
@@ -351,13 +349,6 @@ namespace Fmarketer.Models.Migrations
                     b.HasOne("Fmarketer.Models.Model.Request", "_Request")
                         .WithMany("_Chats")
                         .HasForeignKey("_RequestId");
-                });
-
-            modelBuilder.Entity("Fmarketer.Models.Model.Consultant", b =>
-                {
-                    b.HasOne("Fmarketer.Models.Model.Credential", "_Credential")
-                        .WithMany()
-                        .HasForeignKey("_CredentialId");
                 });
 
             modelBuilder.Entity("Fmarketer.Models.Model.ConsultantCoverage", b =>
@@ -372,6 +363,24 @@ namespace Fmarketer.Models.Migrations
                     b.HasOne("Fmarketer.Models.Model.Consultant", "_Consultant")
                         .WithMany("_Services")
                         .HasForeignKey("_ConsultantId");
+                });
+
+            modelBuilder.Entity("Fmarketer.Models.Model.Credential", b =>
+                {
+                    b.HasOne("Fmarketer.Models.Model.Admin", "_Admin")
+                        .WithOne("_Credential")
+                        .HasForeignKey("Fmarketer.Models.Model.Credential", "_AdminId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Fmarketer.Models.Model.Consultant", "_Consultant")
+                        .WithOne("_Credential")
+                        .HasForeignKey("Fmarketer.Models.Model.Credential", "_ConsultandId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Fmarketer.Models.Model.User", "_User")
+                        .WithOne("_Credential")
+                        .HasForeignKey("Fmarketer.Models.Model.Credential", "_UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Fmarketer.Models.Model.Request", b =>
@@ -390,13 +399,6 @@ namespace Fmarketer.Models.Migrations
                 });
 
             modelBuilder.Entity("Fmarketer.Models.Model.SecurityToken", b =>
-                {
-                    b.HasOne("Fmarketer.Models.Model.Credential", "_Credential")
-                        .WithMany()
-                        .HasForeignKey("_CredentialId");
-                });
-
-            modelBuilder.Entity("Fmarketer.Models.Model.User", b =>
                 {
                     b.HasOne("Fmarketer.Models.Model.Credential", "_Credential")
                         .WithMany()

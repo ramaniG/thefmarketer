@@ -8,6 +8,11 @@ namespace Fmarketer.Models
     {
         public MainContext(DbContextOptions<MainContext> options) : base(options)
         {
+            Admins.Include(a => a._Credential).ToListAsync();
+            Chats.Include(c => c._Request).ToListAsync();
+            SecurityTokens.Include(s => s._Credential).ToListAsync();
+            Consultants.Include(a => a._Credential).Include(c => c._Coverages).Include(c => c._Requests).Include(c => c._Services).ToListAsync();
+            Users.Include(a => a._Credential).ToListAsync();
         }
 
         public DbSet<Admin> Admins { get; set; }
@@ -23,15 +28,37 @@ namespace Fmarketer.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Admin
             modelBuilder.Entity<Admin>(ConfigureAdmin);
+
+            // Chat
             modelBuilder.Entity<Chat>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+
+            // Consultant
             modelBuilder.Entity<Consultant>(ConfigureConsultant);
+            modelBuilder.Entity<Consultant>().HasMany(c => c._Services).WithOne(s => s._Consultant);
+            modelBuilder.Entity<Consultant>().HasMany(c => c._Coverages).WithOne(s => s._Consultant);
+            modelBuilder.Entity<Consultant>().HasMany(c => c._Requests).WithOne(s => s._Consultant);
+
+            // Coverage
             modelBuilder.Entity<ConsultantCoverage>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+
+            // Service
             modelBuilder.Entity<ConsultantService>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+
+            // Credential
             modelBuilder.Entity<Credential>(ConfigureCredential);
+
+            // Request
             modelBuilder.Entity<Request>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+
+            // Review
             modelBuilder.Entity<Review>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+
+            // Security
             modelBuilder.Entity<SecurityToken>(builder => builder.HasQueryFilter(x => !x.IsDeleted));
+
+            // User
             modelBuilder.Entity<User>(ConfigureUser);
         }
 

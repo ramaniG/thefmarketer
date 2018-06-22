@@ -1,6 +1,7 @@
 ﻿using Fmarketer.Base;
 using Fmarketer.Models;
 using Fmarketer.Models.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace Fmarketer.DataAccess.Repository
         public SecurityTokenRepository(MainContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
+            _dbContext.SecurityTokens.Include(s => s._Credential);
         }
 
         public override Task<SecurityToken> AddAsync(SecurityToken token)
@@ -29,7 +31,7 @@ namespace Fmarketer.DataAccess.Repository
                     // If haven't reach expiry time, increase the timeout
                     token.ExpiryTime = token.ExpiryTime.AddMinutes(15); // TODO : Update when change the value to setting
                     Update(token);
-                    return token;
+                    return await Get(id);
                 }
             }
 

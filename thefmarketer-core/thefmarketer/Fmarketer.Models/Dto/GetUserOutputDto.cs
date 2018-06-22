@@ -5,6 +5,6 @@ namespace Fmarketer.Models.Dto
 {
     public class GetUserOutputDto
     {
-        public List<Credential> Credentials { get; set; }
+        public List<CredentialUserDto> Users { get; set; }
     }
 }

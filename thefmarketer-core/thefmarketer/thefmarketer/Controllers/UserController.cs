@@ -13,9 +13,9 @@ namespace thefmarketer.Controllers
         UserBU userBU;
 
         public UserController(SecurityTokenRepository securityToken, ConsultantRepository consultant,
-            RequestRepository request, ReviewRepository review, ChatRepository chat)
+            RequestRepository request, ReviewRepository review, ChatRepository chat, UserRepository user)
         {
-            userBU = new UserBU(securityToken, consultant, request, review, chat);
+            userBU = new UserBU(securityToken, consultant, request, review, chat, user);
         }
 
         [HttpPost("SearchConsultant")]
