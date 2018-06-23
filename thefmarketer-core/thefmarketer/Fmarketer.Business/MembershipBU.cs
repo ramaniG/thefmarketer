@@ -1,6 +1,7 @@
 ﻿using Fmarketer.Base;
 using Fmarketer.Base.Enums;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Fmarketer.Models.Model;
 using System;
@@ -19,15 +20,19 @@ namespace Fmarketer.Business
         SecurityTokenRepository securityTokenRepository;
         SecurityTokenBU securityTokenBU;
 
-        public MembershipBU(CredentialRepository credential, UserRepository user, AdminRepository admin, ConsultantRepository consultant, SecurityTokenRepository securityToken)
-        {
-            this.credentialRepository = credential;
-            this.userRepository = user;
-            this.adminRepository = admin;
-            this.consultantRepository = consultant;
-            this.securityTokenRepository = securityToken;
+        UnitOfWork unitOfWork;
 
-            securityTokenBU = new SecurityTokenBU(this.securityTokenRepository, user, consultant, admin);
+        public MembershipBU(UnitOfWork unit, CredentialRepository credential, UserRepository user, AdminRepository admin, ConsultantRepository consultant, SecurityTokenRepository securityToken)
+        {
+            credentialRepository = credential;
+            userRepository = user;
+            adminRepository = admin;
+            consultantRepository = consultant;
+            securityTokenRepository = securityToken;
+
+            unitOfWork = unit;
+
+            securityTokenBU = new SecurityTokenBU(unit, securityTokenRepository, user, consultant, admin);
         }
 
         public async Task<AddUserOutputDto> AddUserAsync(AddUserDto dto)
@@ -41,12 +46,15 @@ namespace Fmarketer.Business
             switch (dto.UserType) {
                 case USERTYPES.User:
                     var user = await CreateUserAsync(dto, credential);
+                    await unitOfWork.Complete();
                     return new AddUserOutputDto(credential, user);
                 case USERTYPES.Consultant:
                     var consultant = await CreateConsultantAsync(dto, credential);
+                    await unitOfWork.Complete();
                     return new AddUserOutputDto(credential, consultant);
                 case USERTYPES.Admin:
                     var admin = await CreateAdminAsync(dto, credential);
+                    await unitOfWork.Complete();
                     return new AddUserOutputDto(credential, admin);
                 case USERTYPES.SuperAdmin:
                     break;
@@ -69,14 +77,15 @@ namespace Fmarketer.Business
             // Check permission to update
             if (credential.Credential.UserType == USERTYPES.Admin || credential.Credential.UserType == USERTYPES.SuperAdmin) {
                 // Admin can update any user
-                await UpdateUserForAdminAsync(dto); 
-            }
-            else if (credential.Credential.Id.Equals(new Guid(dto.Id))) {
+                await UpdateUserForAdminAsync(dto);
+            } else if (credential.Credential.Id.Equals(new Guid(dto.Id))) {
                 // Only can update if same user as logged in
                 await UpdateUserForNormalAsync(dto);
+            } else {
+                throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
             }
 
-            throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
+            await unitOfWork.Complete();
         }
 
         public async Task DeleteUserAsync(DeleteUserDto dto)
@@ -95,12 +104,14 @@ namespace Fmarketer.Business
             } else if (credential.Credential.Id.Equals(new Guid(dto.Id))) {
                 // Only can update if same user as logged in
                 await DeleteAsync(new Guid(dto.Id));
+            } else {
+                throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
             }
 
-            throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
+            await unitOfWork.Complete();
         }
 
-        public async Task<GetUserOutputDto> GetUsersAsync(GetUserDto dto)
+        public async Task<GetUsersOutputDto> GetUsersAsync(GetUserDto dto)
         {
             // Check Credential
             var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
@@ -112,10 +123,27 @@ namespace Fmarketer.Business
             // Check permission to update
             if (credential.Credential.UserType == USERTYPES.Admin || credential.Credential.UserType == USERTYPES.SuperAdmin) {
                 // Admin can update any user
-                var user = await credentialRepository.GetAll();
+                var list = new List<GetUserOutputDto>();
+                // Get Admin
+                var admins = await adminRepository.GetAll();
+                foreach (var item in admins) {
+                    list.Add(new GetUserOutputDto(item._Credential, item));
+                }
 
-                var output = new GetUserOutputDto() {
-                    Credentials = user.ToList()
+                // Get Consultants
+                var consultants = await consultantRepository.GetAll();
+                foreach (var item in consultants) {
+                    list.Add(new GetUserOutputDto(item._Credential, item));
+                }
+
+                // Get Users
+                var users = await userRepository.GetAll();
+                foreach (var item in users) {
+                    list.Add(new GetUserOutputDto(item._Credential, item));
+                }
+
+                var output = new GetUsersOutputDto() {
+                    Users = list
                 };
 
                 return output;
@@ -183,7 +211,7 @@ namespace Fmarketer.Business
 
             return await consultantRepository.AddAsync(consultant);
         }
-        
+
         private async Task UpdateUserForNormalAsync(UpdateUserDto dto)
         {
             var credential = await credentialRepository.Get(new Guid(dto.Id));
@@ -193,8 +221,10 @@ namespace Fmarketer.Business
             }
 
             // Update Credential
-            credential.Password = (!string.IsNullOrEmpty(dto.Password)) ? dto.Password : credential.Password;
-            credentialRepository.Update(credential);
+            if (!string.IsNullOrEmpty(dto.Password)) {
+                credential.Password = dto.Password;
+                credentialRepository.UpdateWithPassword(credential);
+            } 
 
             // Update User
             switch (credential.UserType) {
@@ -225,9 +255,15 @@ namespace Fmarketer.Business
             // Update Credential
             credential.CredentialState = dto.CredentialState ?? credential.CredentialState;
             credential.NumberOfTry = dto.NumberOfTry ?? credential.NumberOfTry;
-            credential.Password = (!string.IsNullOrEmpty(dto.Password)) ? dto.Password : credential.Password;
             credential.Verified = dto.Verified ?? credential.Verified;
-            credentialRepository.Update(credential);
+
+            if (string.IsNullOrEmpty(dto.Password)) {
+                credentialRepository.Update(credential);
+            } else {
+                credential.Password = dto.Password;
+                credentialRepository.UpdateWithPassword(credential);
+            }
+
 
             // Update User
             switch (credential.UserType) {
@@ -293,7 +329,7 @@ namespace Fmarketer.Business
             if (credential == null) {
                 throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
             }
-            
+
             // Delete User
             switch (credential.UserType) {
                 case USERTYPES.User:

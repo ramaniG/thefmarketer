@@ -1,6 +1,7 @@
 ﻿using Fmarketer.Base;
 using Fmarketer.Base.Enums;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Fmarketer.Models.Model;
 using System;
@@ -20,7 +21,9 @@ namespace Fmarketer.Business
         ChatRepository chatRepository;
         SecurityTokenBU securityTokenBU;
 
-        public UserBU(SecurityTokenRepository securityToken, ConsultantRepository consultant, 
+        UnitOfWork unitOfWork;
+
+        public UserBU(UnitOfWork unit, SecurityTokenRepository securityToken, ConsultantRepository consultant, 
             RequestRepository request, ReviewRepository review, ChatRepository chat, UserRepository user)
         {
             securityTokenRepository = securityToken;
@@ -29,7 +32,9 @@ namespace Fmarketer.Business
             reviewRepository = review;
             chatRepository = chat;
 
-            securityTokenBU = new SecurityTokenBU(securityTokenRepository, user, null, null);
+            unitOfWork = unit;
+
+            securityTokenBU = new SecurityTokenBU(unit, securityTokenRepository, user, null, null);
         }
 
         public async Task<SearchConsultantOutputDto> SearchConsultantAsync(SearchConsultantDto dto)
@@ -78,6 +83,7 @@ namespace Fmarketer.Business
                 };
 
                 await requestRepository.AddAsync(request);
+                await unitOfWork.Complete();
             } 
 
             throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
@@ -101,6 +107,7 @@ namespace Fmarketer.Business
 
                 request._Chats.Add(chat);
                 requestRepository.Update(request);
+                await unitOfWork.Complete();
             }
 
             throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
@@ -117,6 +124,7 @@ namespace Fmarketer.Business
                     if(!request.IsCompleted) {
                         request.IsActive = dto.IsActive ?? request.IsActive;
                         requestRepository.Update(request);
+                        await unitOfWork.Complete();
                     }
                 }
             }
@@ -143,6 +151,7 @@ namespace Fmarketer.Business
                 request._Review = review;
 
                 requestRepository.Update(request);
+                await unitOfWork.Complete();
             }
 
             throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);

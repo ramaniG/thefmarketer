@@ -45,9 +45,8 @@ namespace Fmarketer.Base
             entity.Updated = DateTime.Now;
 
             await _entities.AddAsync(entity);
-            await _context.SaveChangesAsync();
 
-            return _entities.Find(entity.Id);
+            return await Get(entity.Id);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
@@ -60,7 +59,6 @@ namespace Fmarketer.Base
             }
 
             _entities.AddRange(entities);
-            _context.SaveChangesAsync();
         }
 
         public void Remove(TEntity entity)
@@ -82,7 +80,6 @@ namespace Fmarketer.Base
         {
             entity.Updated = DateTime.Now;
             _entities.Update(entity);
-            _context.SaveChangesAsync();
         }
     }
 }

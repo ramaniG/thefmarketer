@@ -1,5 +1,6 @@
 ﻿using Fmarketer.Business;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -12,10 +13,10 @@ namespace thefmarketer.Controllers
     {
         UserBU userBU;
 
-        public UserController(SecurityTokenRepository securityToken, ConsultantRepository consultant,
+        public UserController(UnitOfWork unit, SecurityTokenRepository securityToken, ConsultantRepository consultant,
             RequestRepository request, ReviewRepository review, ChatRepository chat, UserRepository user)
         {
-            userBU = new UserBU(securityToken, consultant, request, review, chat, user);
+            userBU = new UserBU(unit, securityToken, consultant, request, review, chat, user);
         }
 
         [HttpPost("SearchConsultant")]

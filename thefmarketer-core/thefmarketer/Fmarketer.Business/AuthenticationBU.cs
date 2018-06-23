@@ -1,6 +1,7 @@
 ﻿using Fmarketer.Base;
 using Fmarketer.Base.Enums;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Fmarketer.Models.Model;
 using System;
@@ -13,15 +14,19 @@ namespace Fmarketer.Business
         CredentialRepository credentialRepository;
         SecurityTokenRepository securityTokenRepository;
 
-        public AuthenticationBU(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
+        UnitOfWork unitOfWork;
+
+        public AuthenticationBU(UnitOfWork unit, CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
         {
             this.credentialRepository = credentialRepository;
             this.securityTokenRepository = securityTokenRepository;
+
+            unitOfWork = unit;
         }
 
         public async Task<LoginOutDto> LoginByEmailAsync(LoginDto dto)
         {
-            var credential = credentialRepository.FindByEmail(dto.Email);
+            var credential = await credentialRepository.FindByEmailAsync(dto.Email);
 
             if (credential != null && credential.AuthType == AUTHTYPES.Email && credential.CredentialState == CREDENTIALSTATUS.Active && credential.Verified) {
                 if (BCrypt.BCryptHelper.CheckPassword(dto.Password, credential.Password)) {
@@ -29,6 +34,8 @@ namespace Fmarketer.Business
                     credentialRepository.Update(credential);
 
                     var token = await CreateSecurityTokenAsync(credential);
+
+                    await unitOfWork.Complete();
 
                     return new LoginOutDto(credential, token);
                 }
@@ -45,6 +52,9 @@ namespace Fmarketer.Business
                 token.ExpiryTime = DateTime.Now;
 
                 securityTokenRepository.Update(token);
+
+                await unitOfWork.Complete();
+                return;
             }
 
             throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
@@ -59,7 +69,10 @@ namespace Fmarketer.Business
                 _Credential = credential
             };
 
-            return await securityTokenRepository.AddAsync(token);
+            token = await securityTokenRepository.AddAsync(token);
+            await unitOfWork.Complete();
+
+            return token;
         }
     }
 }

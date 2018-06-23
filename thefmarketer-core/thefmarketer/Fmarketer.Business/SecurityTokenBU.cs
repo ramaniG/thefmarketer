@@ -1,6 +1,7 @@
 ﻿using Fmarketer.Base;
 using Fmarketer.Base.Enums;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using System;
 using System.Threading.Tasks;
@@ -14,12 +15,16 @@ namespace Fmarketer.Business
         ConsultantRepository consultantRepository;
         AdminRepository adminRepository;
 
-        public SecurityTokenBU(SecurityTokenRepository securityToken, UserRepository user, ConsultantRepository consultant, AdminRepository admin)
+        UnitOfWork unitOfWork;
+
+        public SecurityTokenBU(UnitOfWork unit, SecurityTokenRepository securityToken, UserRepository user, ConsultantRepository consultant, AdminRepository admin)
         {
             securityTokenRepository = securityToken;
             userRepository = user;
             consultantRepository = consultant;
             adminRepository = admin;
+
+            unitOfWork = unit;
         }
 
         public async Task<CredentialUserDto> CheckTokenAsync(string token)
@@ -35,6 +40,8 @@ namespace Fmarketer.Business
             if (credential == null) {
                 throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
             }
+            
+            await unitOfWork.Complete();
 
             // Find User
             switch (credential.UserType) {

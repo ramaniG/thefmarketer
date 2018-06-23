@@ -1,6 +1,7 @@
 ﻿using Fmarketer.Base;
 using Fmarketer.Base.Enums;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Fmarketer.Models.Model;
 using System;
@@ -19,7 +20,9 @@ namespace Fmarketer.Business
         ChatRepository chatRepository;
         SecurityTokenBU securityTokenBU;
 
-        public ConsultantBU(SecurityTokenRepository securityToken, ConsultantRepository consultant, ConsultantCoverageRepository coverage, 
+        UnitOfWork unitOfWork;
+
+        public ConsultantBU(UnitOfWork unit, SecurityTokenRepository securityToken, ConsultantRepository consultant, ConsultantCoverageRepository coverage, 
             ConsultantServiceRepository service, RequestRepository request, ChatRepository chat)
         {
             securityTokenRepository = securityToken;
@@ -29,7 +32,9 @@ namespace Fmarketer.Business
             requestRepository = request;
             chatRepository = chat;
 
-            securityTokenBU = new SecurityTokenBU(securityTokenRepository, null, consultant, null);
+            unitOfWork = unit;
+
+            securityTokenBU = new SecurityTokenBU(unit, securityTokenRepository, null, consultant, null);
         }
 
         public async Task AddStateAsync(AddStateDto dto)
@@ -47,6 +52,7 @@ namespace Fmarketer.Business
                     };
 
                     coverage = await coverageRepository.AddAsync(coverage);
+                    await unitOfWork.Complete();
                 }
             }
 
@@ -73,6 +79,7 @@ namespace Fmarketer.Business
                 };
 
                 service = await serviceRepository.AddAsync(service);
+                await unitOfWork.Complete();
             }
 
             throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
@@ -91,6 +98,7 @@ namespace Fmarketer.Business
                     coverage.IsDeleted = (dto.IsDeleted) ?? coverage.IsDeleted;
 
                     coverageRepository.Update(coverage);
+                    await unitOfWork.Complete();
                 }
             }
 
@@ -116,6 +124,7 @@ namespace Fmarketer.Business
                     service.IsDeleted = (dto.IsDeleted) ?? service.IsDeleted;
 
                     serviceRepository.Update(service);
+                    await unitOfWork.Complete();
                 }
             }
 
@@ -156,6 +165,8 @@ namespace Fmarketer.Business
 
                 request._Chats.Add(chat);
                 requestRepository.Update(request);
+
+                await unitOfWork.Complete();
             }
 
             throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);

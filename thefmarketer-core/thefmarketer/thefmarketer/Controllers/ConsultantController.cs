@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fmarketer.Business;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Fmarketer.Models.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,10 @@ namespace Fmarketer.Api.Controllers
     {
         ConsultantBU consultantBU;
 
-        public ConsultantController(SecurityTokenRepository securityToken, ConsultantRepository consultant, ConsultantCoverageRepository coverage, 
+        public ConsultantController(UnitOfWork unit, SecurityTokenRepository securityToken, ConsultantRepository consultant, ConsultantCoverageRepository coverage, 
             ConsultantServiceRepository service, RequestRepository request, ChatRepository chat)
         {
-            consultantBU = new ConsultantBU(securityToken, consultant, coverage, service, request, chat);
+            consultantBU = new ConsultantBU(unit, securityToken, consultant, coverage, service, request, chat);
         }
 
         [HttpPost("SearchRequest")]

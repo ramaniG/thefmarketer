@@ -1,5 +1,6 @@
 ﻿using Fmarketer.Business;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -13,9 +14,9 @@ namespace Fmarketer.Api.Controllers
     {
         private AuthenticationBU authentication;
 
-        public AuthController(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
+        public AuthController(UnitOfWork unit, CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
         {
-            authentication = new AuthenticationBU(credentialRepository, securityTokenRepository);
+            authentication = new AuthenticationBU(unit, credentialRepository, securityTokenRepository);
         }
 
         [HttpPost("Login")]

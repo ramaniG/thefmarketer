@@ -30,18 +30,20 @@ namespace thefmarketer
             });
 
             services.AddDbContext<MainContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc();
-
             services.AddScoped<AdminRepository, AdminRepository>();
             services.AddScoped<ChatRepository, ChatRepository>();
             services.AddScoped<ConsultantCoverageRepository, ConsultantCoverageRepository>();
             services.AddScoped<ConsultantRepository, ConsultantRepository>();
             services.AddScoped<ConsultantServiceRepository, ConsultantServiceRepository>();
-            services.AddScoped<CredentialRepository, CredentialRepository>();
             services.AddScoped<RequestRepository, RequestRepository>();
             services.AddScoped<ReviewRepository, ReviewRepository>();
             services.AddScoped<SecurityTokenRepository, SecurityTokenRepository>();
             services.AddScoped<UserRepository, UserRepository>();
+            services.AddScoped<CredentialRepository, CredentialRepository>();
+
+            services.AddScoped<UnitOfWork, UnitOfWork>();
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

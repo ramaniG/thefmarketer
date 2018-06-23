@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fmarketer.Business;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace Fmarketer.Api.Controllers
     {
         AdminBU adminBU;
 
-        public AdminController(SecurityTokenRepository securityToken, ConsultantRepository consultant, RequestRepository request, AdminRepository admin)
+        public AdminController(UnitOfWork unit, SecurityTokenRepository securityToken, ConsultantRepository consultant, RequestRepository request, AdminRepository admin)
         {
-            adminBU = new AdminBU(securityToken, consultant, request, admin);
+            adminBU = new AdminBU(unit, securityToken, consultant, request, admin);
         }
 
         [HttpPost("SearchConsultant")]

@@ -2,6 +2,7 @@
 using Fmarketer.Base;
 using Fmarketer.Business;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +15,9 @@ namespace Fmarketer.Api.Controllers
     {
         MembershipBU membershipBU;
 
-        public MembershipController(CredentialRepository credential, UserRepository user, AdminRepository admin, ConsultantRepository consultant, SecurityTokenRepository token)
+        public MembershipController(UnitOfWork unit, CredentialRepository credential, UserRepository user, AdminRepository admin, ConsultantRepository consultant, SecurityTokenRepository token)
         {
-            membershipBU = new MembershipBU(credential, user, admin, consultant, token);
+            membershipBU = new MembershipBU(unit, credential, user, admin, consultant, token);
         }
 
         [HttpGet()]

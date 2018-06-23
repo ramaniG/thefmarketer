@@ -1,6 +1,7 @@
 ﻿using Fmarketer.Base;
 using Fmarketer.Base.Enums;
 using Fmarketer.DataAccess.Repository;
+using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using System;
 using System.Linq;
@@ -16,14 +17,17 @@ namespace Fmarketer.Business
         AdminRepository adminRepository;
         SecurityTokenBU securityTokenBU;
 
-        public AdminBU(SecurityTokenRepository securityToken, ConsultantRepository consultant, RequestRepository request, AdminRepository admin)
+        UnitOfWork unitOfWork;
+
+        public AdminBU(UnitOfWork unit, SecurityTokenRepository securityToken, ConsultantRepository consultant, RequestRepository request, AdminRepository admin)
         {
             securityTokenRepository = securityToken;
             consultantRepository = consultant;
             requestRepository = request;
             adminRepository = admin;
+            unitOfWork = unit;
 
-            securityTokenBU = new SecurityTokenBU(securityTokenRepository, null, null, admin);
+            securityTokenBU = new SecurityTokenBU(unit, securityTokenRepository, null, null, admin);
         }
 
         public async Task<SearchConsultantOutputDto> SearchConsultantAsync(SearchConsultantDto dto)
@@ -70,6 +74,8 @@ namespace Fmarketer.Business
                     }
                 }
             }
+
+            await unitOfWork.Complete();
 
             throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
         }
