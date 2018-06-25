@@ -23,9 +23,10 @@ namespace Fmarketer.Base
             return await _entities.FindAsync(id);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public async Task<List<TEntity>> GetAll()
         {
-            return await _entities.ToListAsync();
+            List<TEntity> output = await _entities.ToListAsync();
+            return output;
         }
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
@@ -33,9 +34,9 @@ namespace Fmarketer.Base
             return _entities.Where(predicate).ToList();
         }
 
-        public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return _entities.SingleOrDefault(predicate);
+            return await _entities.SingleOrDefaultAsync(predicate);
         }
 
         public virtual async Task<TEntity> AddAsync(TEntity entity)

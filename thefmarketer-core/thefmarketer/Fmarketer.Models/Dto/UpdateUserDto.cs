@@ -1,12 +1,11 @@
 ﻿using Fmarketer.Base.Enums;
-using System.Collections.Generic;
 
 namespace Fmarketer.Models.Dto
 {
     public class UpdateUserDto
     {
         public string Token { get; set; }
-        public string Id { get; set; }
+        public string CredentialId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Contact { get; set; }
@@ -20,7 +19,5 @@ namespace Fmarketer.Models.Dto
         public CREDENTIALSTATUS? CredentialState { get; set; }
         public int? NumberOfTry { get; set; }
         public bool? Verified { get; set; }
-        public List<STATES> States { get; set; }
-        public List<SERVICES> Services { get; set; }
     }
 }

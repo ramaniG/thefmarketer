@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Fmarketer.Business;
 using Fmarketer.DataAccess.Repository;
 using Fmarketer.Models;
 using Fmarketer.Models.Dto;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fmarketer.Api.Controllers
@@ -16,28 +12,35 @@ namespace Fmarketer.Api.Controllers
     public class AdminController : ControllerBase
     {
         AdminBU adminBU;
+        UnitOfWork unit;
 
         public AdminController(UnitOfWork unit, SecurityTokenRepository securityToken, ConsultantRepository consultant, RequestRepository request, AdminRepository admin)
         {
-            adminBU = new AdminBU(unit, securityToken, consultant, request, admin);
+            adminBU = new AdminBU(securityToken, consultant, request, admin);
+            this.unit = unit;
         }
 
         [HttpPost("SearchConsultant")]
         public async Task<IActionResult> SearchConsultant([FromBody]SearchConsultantDto dto)
         {
-            return Ok(await adminBU.SearchConsultantAsync(dto));
+            var output = await adminBU.SearchConsultantAsync(dto);
+            await unit.Complete();
+            return Ok(output);
         }
 
         [HttpPost("SearchRequest")]
         public async Task<IActionResult> SearchRequest([FromBody]SearchRequestDto dto)
         {
-            return Ok(await adminBU.SearchRequestAsync(dto));
+            var output = await adminBU.SearchRequestAsync(dto);
+            await unit.Complete();
+            return Ok(output);
         }
 
         [HttpPost("UpdateRequest")]
         public async Task<IActionResult> UpdateRequest([FromBody]UpdateRequestDto dto)
         {
             await adminBU.UpdateRequestAsync(dto);
+            await unit.Complete();
             return Ok();
         }
     }

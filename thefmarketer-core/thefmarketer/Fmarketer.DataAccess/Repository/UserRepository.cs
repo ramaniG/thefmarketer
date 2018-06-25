@@ -33,9 +33,9 @@ namespace Fmarketer.DataAccess.Repository
             return _dbContext.Users.Where(user => user.Email == email && !user.IsDeleted).FirstOrDefault();
         }
 
-        public User FindByCredential(Guid id)
+        public async Task<User> FindByCredentialAsync(Guid id)
         {
-            return _dbContext.Users.Where(user => user._Credential.Id == id && !user.IsDeleted).FirstOrDefault();
+            return await SingleOrDefaultAsync(user => user._Credential.Id == id && !user.IsDeleted);
         }
     }
 }

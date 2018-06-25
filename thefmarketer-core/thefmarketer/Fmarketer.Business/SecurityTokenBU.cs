@@ -15,16 +15,12 @@ namespace Fmarketer.Business
         ConsultantRepository consultantRepository;
         AdminRepository adminRepository;
 
-        UnitOfWork unitOfWork;
-
-        public SecurityTokenBU(UnitOfWork unit, SecurityTokenRepository securityToken, UserRepository user, ConsultantRepository consultant, AdminRepository admin)
+        public SecurityTokenBU(SecurityTokenRepository securityToken, UserRepository user, ConsultantRepository consultant, AdminRepository admin)
         {
             securityTokenRepository = securityToken;
             userRepository = user;
             consultantRepository = consultant;
             adminRepository = admin;
-
-            unitOfWork = unit;
         }
 
         public async Task<CredentialUserDto> CheckTokenAsync(string token)
@@ -40,25 +36,31 @@ namespace Fmarketer.Business
             if (credential == null) {
                 throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
             }
-            
-            await unitOfWork.Complete();
+
+            CredentialUserDto users = null;
 
             // Find User
             switch (credential.UserType) {
                 case USERTYPES.User:
-                    return new CredentialUserDto(credential, userRepository.FindByCredential(credential.Id));
+                    users = new CredentialUserDto(credential, await userRepository.FindByCredentialAsync(credential.Id));
+                    break;
                 case USERTYPES.Consultant:
-                    return new CredentialUserDto(credential, consultantRepository.FindByCredential(credential.Id));
+                    users = new CredentialUserDto(credential, await consultantRepository.FindByCredentialAsync(credential.Id));
+                    break;
                 case USERTYPES.Admin:
-                    return new CredentialUserDto(credential, adminRepository.FindByCredential(credential.Id));
+                    users = new CredentialUserDto(credential, await adminRepository.FindByCredentialAsync(credential.Id));
+                    break;
                 case USERTYPES.SuperAdmin:
                     break;
                 default:
                     break;
             }
 
+            if (users == null) {
+                throw new InvalidOperationException(ErrorMessage.USERMGMT_UNAUTHORIZED);
+            }
 
-            throw new InvalidOperationException(ErrorMessage.USERMGMT_UNAUTHORIZED);
+            return users;
         }
     }
 }

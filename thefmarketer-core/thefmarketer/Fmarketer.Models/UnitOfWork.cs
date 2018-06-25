@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Fmarketer.Models
 {
@@ -13,7 +15,18 @@ namespace Fmarketer.Models
 
         public async Task<int> Complete()
         {
-            return await _context.SaveChangesAsync();
+
+            try {
+                if (_context.ChangeTracker.HasChanges()) {
+                    await _context.SaveChangesAsync();
+                    Thread.Sleep(1000);
+                }
+            }
+            catch (Exception ex) {
+                Console.Out.WriteLine(ex.Message);
+            }
+
+            return 0;
         }
 
         public void Dispose()

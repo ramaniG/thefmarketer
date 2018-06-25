@@ -20,19 +20,15 @@ namespace Fmarketer.Business
         SecurityTokenRepository securityTokenRepository;
         SecurityTokenBU securityTokenBU;
 
-        UnitOfWork unitOfWork;
-
-        public MembershipBU(UnitOfWork unit, CredentialRepository credential, UserRepository user, AdminRepository admin, ConsultantRepository consultant, SecurityTokenRepository securityToken)
+        public MembershipBU(CredentialRepository credential, UserRepository user, AdminRepository admin, ConsultantRepository consultant, SecurityTokenRepository securityToken)
         {
             credentialRepository = credential;
             userRepository = user;
             adminRepository = admin;
             consultantRepository = consultant;
             securityTokenRepository = securityToken;
-
-            unitOfWork = unit;
-
-            securityTokenBU = new SecurityTokenBU(unit, securityTokenRepository, user, consultant, admin);
+            
+            securityTokenBU = new SecurityTokenBU(securityTokenRepository, user, consultant, admin);
         }
 
         public async Task<AddUserOutputDto> AddUserAsync(AddUserDto dto)
@@ -46,15 +42,12 @@ namespace Fmarketer.Business
             switch (dto.UserType) {
                 case USERTYPES.User:
                     var user = await CreateUserAsync(dto, credential);
-                    await unitOfWork.Complete();
                     return new AddUserOutputDto(credential, user);
                 case USERTYPES.Consultant:
                     var consultant = await CreateConsultantAsync(dto, credential);
-                    await unitOfWork.Complete();
                     return new AddUserOutputDto(credential, consultant);
                 case USERTYPES.Admin:
                     var admin = await CreateAdminAsync(dto, credential);
-                    await unitOfWork.Complete();
                     return new AddUserOutputDto(credential, admin);
                 case USERTYPES.SuperAdmin:
                     break;
@@ -78,14 +71,12 @@ namespace Fmarketer.Business
             if (credential.Credential.UserType == USERTYPES.Admin || credential.Credential.UserType == USERTYPES.SuperAdmin) {
                 // Admin can update any user
                 await UpdateUserForAdminAsync(dto);
-            } else if (credential.Credential.Id.Equals(new Guid(dto.Id))) {
+            } else if (credential.Credential.Id.Equals(new Guid(dto.CredentialId))) {
                 // Only can update if same user as logged in
                 await UpdateUserForNormalAsync(dto);
             } else {
                 throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
             }
-
-            await unitOfWork.Complete();
         }
 
         public async Task DeleteUserAsync(DeleteUserDto dto)
@@ -107,8 +98,6 @@ namespace Fmarketer.Business
             } else {
                 throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
             }
-
-            await unitOfWork.Complete();
         }
 
         public async Task<GetUsersOutputDto> GetUsersAsync(GetUserDto dto)
@@ -126,19 +115,22 @@ namespace Fmarketer.Business
                 var list = new List<GetUserOutputDto>();
                 // Get Admin
                 var admins = await adminRepository.GetAll();
-                foreach (var item in admins) {
+                for (int i = 0; i < admins.Count(); i++) {
+                    var item = admins.ElementAt(i);
                     list.Add(new GetUserOutputDto(item._Credential, item));
                 }
 
                 // Get Consultants
                 var consultants = await consultantRepository.GetAll();
-                foreach (var item in consultants) {
+                for (int i = 0; i < consultants.Count(); i++) {
+                    var item = consultants.ElementAt(i);
                     list.Add(new GetUserOutputDto(item._Credential, item));
                 }
 
                 // Get Users
                 var users = await userRepository.GetAll();
-                foreach (var item in users) {
+                for (int i = 0; i < users.Count(); i++) {
+                    var item = users.ElementAt(i);
                     list.Add(new GetUserOutputDto(item._Credential, item));
                 }
 
@@ -214,7 +206,7 @@ namespace Fmarketer.Business
 
         private async Task UpdateUserForNormalAsync(UpdateUserDto dto)
         {
-            var credential = await credentialRepository.Get(new Guid(dto.Id));
+            var credential = await credentialRepository.Get(new Guid(dto.CredentialId));
 
             if (credential == null) {
                 throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
@@ -229,13 +221,13 @@ namespace Fmarketer.Business
             // Update User
             switch (credential.UserType) {
                 case USERTYPES.User:
-                    UpdateUser(dto, credential.Id);
+                    await UpdateUserAsync(dto, credential.Id);
                     break;
                 case USERTYPES.Consultant:
-                    UpdateConsultant(dto, credential.Id);
+                    await UpdateConsultantAsync(dto, credential.Id);
                     break;
                 case USERTYPES.Admin:
-                    UpdateAdmin(dto, credential.Id);
+                    await UpdateAdminAsync(dto, credential.Id);
                     break;
                 case USERTYPES.SuperAdmin:
                     break;
@@ -246,7 +238,7 @@ namespace Fmarketer.Business
 
         private async Task UpdateUserForAdminAsync(UpdateUserDto dto)
         {
-            var credential = await credentialRepository.Get(new Guid(dto.Id));
+            var credential = await credentialRepository.Get(new Guid(dto.CredentialId));
 
             if (credential == null) {
                 throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
@@ -268,13 +260,13 @@ namespace Fmarketer.Business
             // Update User
             switch (credential.UserType) {
                 case USERTYPES.User:
-                    UpdateUser(dto, credential.Id);
+                    await UpdateUserAsync(dto, credential.Id);
                     break;
                 case USERTYPES.Consultant:
-                    UpdateConsultant(dto, credential.Id);
+                    await UpdateConsultantAsync(dto, credential.Id);
                     break;
                 case USERTYPES.Admin:
-                    UpdateAdmin(dto, credential.Id);
+                    await UpdateAdminAsync(dto, credential.Id);
                     break;
                 case USERTYPES.SuperAdmin:
                     break;
@@ -283,9 +275,9 @@ namespace Fmarketer.Business
             }
         }
 
-        private void UpdateUser(UpdateUserDto dto, Guid Id)
+        private async Task UpdateUserAsync(UpdateUserDto dto, Guid Id)
         {
-            var user = userRepository.FindByCredential(Id);
+            var user = await userRepository.FindByCredentialAsync(Id);
 
             user.Contact = (!string.IsNullOrEmpty(dto.Contact)) ? dto.Contact : user.Contact;
             user.FirstName = (!string.IsNullOrEmpty(dto.FirstName)) ? dto.FirstName : user.FirstName;
@@ -296,9 +288,9 @@ namespace Fmarketer.Business
             userRepository.Update(user);
         }
 
-        private void UpdateAdmin(UpdateUserDto dto, Guid Id)
+        private async Task UpdateAdminAsync(UpdateUserDto dto, Guid Id)
         {
-            var admin = adminRepository.FindByCredential(Id);
+            var admin = await adminRepository.FindByCredentialAsync(Id);
 
             admin.Contact = (!string.IsNullOrEmpty(dto.Contact)) ? dto.Contact : admin.Contact;
             admin.FirstName = (!string.IsNullOrEmpty(dto.FirstName)) ? dto.FirstName : admin.FirstName;
@@ -307,9 +299,9 @@ namespace Fmarketer.Business
             adminRepository.Update(admin);
         }
 
-        private void UpdateConsultant(UpdateUserDto dto, Guid Id)
+        private async Task UpdateConsultantAsync(UpdateUserDto dto, Guid Id)
         {
-            var consultant = consultantRepository.FindByCredential(Id);
+            var consultant = await consultantRepository.FindByCredentialAsync(Id);
 
             consultant.Contact = (!string.IsNullOrEmpty(dto.Contact)) ? dto.Contact : consultant.Contact;
             consultant.Contact2 = (!string.IsNullOrEmpty(dto.Contact2)) ? dto.Contact2 : consultant.Contact2;
@@ -333,15 +325,15 @@ namespace Fmarketer.Business
             // Delete User
             switch (credential.UserType) {
                 case USERTYPES.User:
-                    var user = userRepository.FindByCredential(credential.Id);
+                    var user = await userRepository.FindByCredentialAsync(credential.Id);
                     userRepository.Remove(user);
                     break;
                 case USERTYPES.Consultant:
-                    var cons = consultantRepository.FindByCredential(credential.Id);
+                    var cons = await consultantRepository.FindByCredentialAsync(credential.Id);
                     consultantRepository.Remove(cons);
                     break;
                 case USERTYPES.Admin:
-                    var admin = adminRepository.FindByCredential(credential.Id);
+                    var admin = await adminRepository.FindByCredentialAsync(credential.Id);
                     adminRepository.Remove(admin);
                     break;
                 case USERTYPES.SuperAdmin:

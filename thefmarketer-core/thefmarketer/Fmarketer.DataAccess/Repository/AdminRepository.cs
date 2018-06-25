@@ -27,9 +27,9 @@ namespace Fmarketer.DataAccess.Repository
             return _dbContext.Admins.Where(admin => admin.Email == email && !admin.IsDeleted).FirstOrDefault();
         }
 
-        public Admin FindByCredential(Guid id)
+        public async Task<Admin> FindByCredentialAsync(Guid id)
         {
-            return _dbContext.Admins.Where(admin => admin._Credential.Id == id && !admin.IsDeleted).FirstOrDefault();
+            return await SingleOrDefaultAsync(admin => admin._Credential.Id == id && !admin.IsDeleted);
         }
     }
 }

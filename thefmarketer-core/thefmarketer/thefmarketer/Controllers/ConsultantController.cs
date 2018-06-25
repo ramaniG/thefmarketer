@@ -16,23 +16,29 @@ namespace Fmarketer.Api.Controllers
     public class ConsultantController : Controller
     {
         ConsultantBU consultantBU;
+        UnitOfWork unit;
 
         public ConsultantController(UnitOfWork unit, SecurityTokenRepository securityToken, ConsultantRepository consultant, ConsultantCoverageRepository coverage, 
             ConsultantServiceRepository service, RequestRepository request, ChatRepository chat)
         {
-            consultantBU = new ConsultantBU(unit, securityToken, consultant, coverage, service, request, chat);
+            consultantBU = new ConsultantBU(securityToken, consultant, coverage, service, request, chat);
+            this.unit = unit;
+
         }
 
         [HttpPost("SearchRequest")]
         public async Task<IActionResult> SearchRequest([FromBody]SearchRequestDto dto)
         {
-            return Ok(await consultantBU.SearchRequestAsync(dto));
+            var output = await consultantBU.SearchRequestAsync(dto);
+            await unit.Complete();
+            return Ok(output);
         }
 
         [HttpPost("State")]
         public async Task<IActionResult> AddState([FromBody]AddStateDto dto)
         {
             await consultantBU.AddStateAsync(dto);
+            await unit.Complete();
             return Ok();
         }
 
@@ -40,6 +46,7 @@ namespace Fmarketer.Api.Controllers
         public async Task<IActionResult> AddService([FromBody]AddServiceDto dto)
         {
             await consultantBU.AddServiceAsync(dto);
+            await unit.Complete();
             return Ok();
         }
 
@@ -47,6 +54,7 @@ namespace Fmarketer.Api.Controllers
         public async Task<IActionResult> UpdateState([FromBody]UpdateStateDto dto)
         {
             await consultantBU.UpdateStateAsync(dto);
+            await unit.Complete();
             return Ok();
         }
 
@@ -54,13 +62,15 @@ namespace Fmarketer.Api.Controllers
         public async Task<IActionResult> UpdateService([FromBody]UpdateServiceDto dto)
         {
             await consultantBU.UpdateServiceAsync(dto);
+            await unit.Complete();
             return Ok();
         }
 
-        [HttpPost("SendChat")]
+        [HttpPost("Chat")]
         public async Task<IActionResult> SendChat([FromBody]SendChatDto dto)
         {
             await consultantBU.SendChatAsync(dto);
+            await unit.Complete();
             return Ok();
         }
     }

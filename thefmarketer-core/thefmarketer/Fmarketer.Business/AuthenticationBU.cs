@@ -14,14 +14,10 @@ namespace Fmarketer.Business
         CredentialRepository credentialRepository;
         SecurityTokenRepository securityTokenRepository;
 
-        UnitOfWork unitOfWork;
-
-        public AuthenticationBU(UnitOfWork unit, CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
+        public AuthenticationBU(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
         {
             this.credentialRepository = credentialRepository;
             this.securityTokenRepository = securityTokenRepository;
-
-            unitOfWork = unit;
         }
 
         public async Task<LoginOutDto> LoginByEmailAsync(LoginDto dto)
@@ -34,8 +30,6 @@ namespace Fmarketer.Business
                     credentialRepository.Update(credential);
 
                     var token = await CreateSecurityTokenAsync(credential);
-
-                    await unitOfWork.Complete();
 
                     return new LoginOutDto(credential, token);
                 }
@@ -52,8 +46,6 @@ namespace Fmarketer.Business
                 token.ExpiryTime = DateTime.Now;
 
                 securityTokenRepository.Update(token);
-
-                await unitOfWork.Complete();
                 return;
             }
 
@@ -70,8 +62,6 @@ namespace Fmarketer.Business
             };
 
             token = await securityTokenRepository.AddAsync(token);
-            await unitOfWork.Complete();
-
             return token;
         }
     }

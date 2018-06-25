@@ -33,9 +33,9 @@ namespace Fmarketer.DataAccess.Repository
             return _dbContext.Consultants.Where(consultant => consultant.Email == email && !consultant.IsDeleted).FirstOrDefault();
         }
 
-        public Consultant FindByCredential(Guid id)
+        public async Task<Consultant> FindByCredentialAsync(Guid id)
         {
-            return _dbContext.Consultants.Where(consultant => consultant._Credential.Id == id && !consultant.IsDeleted).FirstOrDefault();
+            return await SingleOrDefaultAsync(consultant => consultant._Credential.Id == id && !consultant.IsDeleted);
         }
     }
 }

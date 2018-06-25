@@ -14,30 +14,37 @@ namespace Fmarketer.Api.Controllers
     public class MembershipController : Controller
     {
         MembershipBU membershipBU;
+        UnitOfWork unit;
 
         public MembershipController(UnitOfWork unit, CredentialRepository credential, UserRepository user, AdminRepository admin, ConsultantRepository consultant, SecurityTokenRepository token)
         {
-            membershipBU = new MembershipBU(unit, credential, user, admin, consultant, token);
+            membershipBU = new MembershipBU(credential, user, admin, consultant, token);
+            this.unit = unit;
         }
 
         [HttpGet()]
         public async Task<IActionResult> GetAsync()
         {
             var token = Helper.GetTokenFromRequest(HttpContext.Request);
-            return Ok(await membershipBU.GetUsersAsync(new GetUserDto(token)));
+            var output = await membershipBU.GetUsersAsync(new GetUserDto(token));
+            await unit.Complete();
+            return Ok(output);
         }
 
 
         [HttpPost()]
         public async Task<IActionResult> AddAsync([FromBody]AddUserDto dto)
         {
-            return Ok(await membershipBU.AddUserAsync(dto));
+            var output = await membershipBU.AddUserAsync(dto);
+            await unit.Complete();
+            return Ok(output);
         }
 
         [HttpPut()]
         public async Task<IActionResult> UpdateAsync([FromBody]UpdateUserDto dto)
         {
             await membershipBU.UpdateUserAsync(dto);
+            await unit.Complete();
             return Ok();
         }
 
@@ -45,6 +52,7 @@ namespace Fmarketer.Api.Controllers
         public async Task<IActionResult> DeleteAsync([FromBody]DeleteUserDto dto)
         {
             await membershipBU.DeleteUserAsync(dto);
+            await unit.Complete();
             return Ok();
         }
     }

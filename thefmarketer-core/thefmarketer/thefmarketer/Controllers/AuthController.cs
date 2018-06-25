@@ -13,10 +13,12 @@ namespace Fmarketer.Api.Controllers
     public class AuthController : Controller
     {
         private AuthenticationBU authentication;
+        UnitOfWork unit;
 
         public AuthController(UnitOfWork unit, CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
         {
-            authentication = new AuthenticationBU(unit, credentialRepository, securityTokenRepository);
+            authentication = new AuthenticationBU(credentialRepository, securityTokenRepository);
+            this.unit = unit;
         }
 
         [HttpPost("Login")]
@@ -29,6 +31,7 @@ namespace Fmarketer.Api.Controllers
                 BadRequest("Invalid credential passed");
             }
 
+            await unit.Complete();
             return Ok(user);
         }
 
@@ -36,6 +39,7 @@ namespace Fmarketer.Api.Controllers
         public async Task<IActionResult> LogoutAsync([FromBody]LogoutDto dto)
         {
             await authentication.LogoutByEmailAsync(dto);
+            await unit.Complete();
             return Ok();
         }
     }
