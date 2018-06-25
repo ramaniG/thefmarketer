@@ -15,9 +15,10 @@ namespace Fmarketer.Api.Controllers
         private AuthenticationBU authentication;
         UnitOfWork unit;
 
-        public AuthController(UnitOfWork unit, CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
+        public AuthController(UnitOfWork unit, CredentialRepository credential, SecurityTokenRepository securityToken,
+            UserRepository user, ConsultantRepository consultant, AdminRepository admin)
         {
-            authentication = new AuthenticationBU(credentialRepository, securityTokenRepository);
+            authentication = new AuthenticationBU(credential, securityToken, user, consultant, admin);
             this.unit = unit;
         }
 
@@ -26,8 +27,7 @@ namespace Fmarketer.Api.Controllers
         {
             var user = await authentication.LoginByEmailAsync(dto);
 
-            if (user == null)
-            {
+            if (user == null) {
                 BadRequest("Invalid credential passed");
             }
 

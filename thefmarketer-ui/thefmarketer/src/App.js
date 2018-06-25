@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux'
+import { ConnectedRouter, push } from 'react-router-redux'
 import { history } from './_helpers';
 import { alertActions } from './_actions';
 import { LoginPage } from './login';
 import { HomePage } from './home';
+import { PrivateRoute } from './_components';
+import { Route } from 'react-router';
 
 class App extends React.Component {
     constructor(props) {

@@ -1,2 +1,2 @@
-export * from './PrivateRoute.jsx';
+export * from './PrivateRoute.js';
 export * from './account-toggler.js'

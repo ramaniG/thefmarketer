@@ -1,7 +1,6 @@
 ﻿using Fmarketer.Base;
 using Fmarketer.Base.Enums;
 using Fmarketer.DataAccess.Repository;
-using Fmarketer.Models;
 using Fmarketer.Models.Dto;
 using Fmarketer.Models.Model;
 using System;
@@ -13,11 +12,17 @@ namespace Fmarketer.Business
     {
         CredentialRepository credentialRepository;
         SecurityTokenRepository securityTokenRepository;
+        UserRepository userRepository;
+        ConsultantRepository consultantRepository;
+        AdminRepository adminRepository;
 
-        public AuthenticationBU(CredentialRepository credentialRepository, SecurityTokenRepository securityTokenRepository)
+        public AuthenticationBU(CredentialRepository credential, SecurityTokenRepository securityToken, UserRepository user, ConsultantRepository consultant, AdminRepository admin)
         {
-            this.credentialRepository = credentialRepository;
-            this.securityTokenRepository = securityTokenRepository;
+            credentialRepository = credential;
+            securityTokenRepository = securityToken;
+            userRepository = user;
+            consultantRepository = consultant;
+            adminRepository = admin;
         }
 
         public async Task<LoginOutDto> LoginByEmailAsync(LoginDto dto)
@@ -31,7 +36,17 @@ namespace Fmarketer.Business
 
                     var token = await CreateSecurityTokenAsync(credential);
 
-                    return new LoginOutDto(credential, token);
+                    // Find User
+                    switch (credential.UserType) {
+                        case USERTYPES.User:
+                            return new LoginOutDto(credential, token, await userRepository.FindByCredentialAsync(credential.Id));
+                        case USERTYPES.Consultant:
+                            return new LoginOutDto(credential, token, await consultantRepository.FindByCredentialAsync(credential.Id));
+                        case USERTYPES.Admin:
+                            return new LoginOutDto(credential, token, await adminRepository.FindByCredentialAsync(credential.Id));
+                        case USERTYPES.SuperAdmin:
+                            break;
+                    }
                 }
             }
 

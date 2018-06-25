@@ -21,7 +21,7 @@ namespace Fmarketer.Business
         ChatRepository chatRepository;
         SecurityTokenBU securityTokenBU;
 
-        public UserBU(SecurityTokenRepository securityToken, ConsultantRepository consultant, 
+        public UserBU(SecurityTokenRepository securityToken, ConsultantRepository consultant,
             RequestRepository request, ReviewRepository review, ChatRepository chat, UserRepository user)
         {
             securityTokenRepository = securityToken;
@@ -29,7 +29,7 @@ namespace Fmarketer.Business
             requestRepository = request;
             reviewRepository = review;
             chatRepository = chat;
-            
+
             securityTokenBU = new SecurityTokenBU(securityTokenRepository, user, null, null);
         }
 
@@ -40,10 +40,10 @@ namespace Fmarketer.Business
 
             var consultants = consultantRepository.Find(c => !c.IsDeleted &&
                 ((c.FirstName + " " + c.LastName).Contains(dto.Name) || string.IsNullOrEmpty(dto.Name)) &&
-                c._Coverages.Any(v => v.State == dto.State.Value || !dto.State.HasValue) &&
-                c._Services.Any(s => s.Service == dto.Service.Value || !dto.Service.HasValue) &&
-                (c._Requests.Average(r => r._Review.Star) >= dto.MinRating.Value || !dto.MinRating.HasValue) &&
-                (c._Requests.Average(r => r._Review.Star) <= dto.MaxRating.Value || !dto.MaxRating.HasValue));
+                c._Coverages.Any(v => !dto.State.HasValue || v.State == dto.State.Value) &&
+                c._Services.Any(s => !dto.Service.HasValue || s.Service == dto.Service.Value) &&
+                (!dto.MinRating.HasValue || c._Requests.Average(r => r._Review.Star) >= dto.MinRating.Value) &&
+                (!dto.MaxRating.HasValue || c._Requests.Average(r => r._Review.Star) <= dto.MaxRating.Value));
 
             return new SearchConsultantOutputDto(consultants.ToList());
         }
@@ -56,7 +56,7 @@ namespace Fmarketer.Business
             if (credential.Credential.UserType == USERTYPES.User) {
                 var user = credential.User;
                 var requests = user._Requests.FindAll(r => (r.Service == dto.Service.Value || !dto.Service.HasValue) &&
-                    ((r._Consultant.FirstName + "" + r._Consultant.LastName).Contains(dto.Name) || string.IsNullOrEmpty(dto.Name))).OrderBy(x => x.Updated);
+                    (string.IsNullOrEmpty(dto.Name) || (r._Consultant.FirstName + "" + r._Consultant.LastName).Contains(dto.Name))).OrderBy(x => x.Updated);
 
                 return new SearchRequestOutputDto(requests.ToList());
             }
@@ -79,7 +79,7 @@ namespace Fmarketer.Business
                 };
 
                 await requestRepository.AddAsync(request);
-            } 
+            }
 
             throw new InvalidOperationException(ErrorMessage.USERMGMT_OPERATION_FAILED);
         }
@@ -115,7 +115,7 @@ namespace Fmarketer.Business
 
             if (request != null) {
                 if (credential.Credential.UserType == USERTYPES.User && credential.User == request._User) {
-                    if(!request.IsCompleted) {
+                    if (!request.IsCompleted) {
                         request.IsActive = dto.IsActive ?? request.IsActive;
                         requestRepository.Update(request);
                     }
@@ -135,7 +135,7 @@ namespace Fmarketer.Business
                 var review = new Review() {
                     IsPublic = dto.IsPublic,
                     Message = dto.Message,
-                    Star = dto.Star                    
+                    Star = dto.Star
                 };
 
                 review = await reviewRepository.AddAsync(review);
