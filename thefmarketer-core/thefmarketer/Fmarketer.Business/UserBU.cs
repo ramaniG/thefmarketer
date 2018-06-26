@@ -54,7 +54,7 @@ namespace Fmarketer.Business
             var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
 
             if (credential.Credential.UserType == USERTYPES.User) {
-                var user = credential.User;
+                var user = (User)credential.User;
                 var requests = user._Requests.FindAll(r => (r.Service == dto.Service.Value || !dto.Service.HasValue) &&
                     (string.IsNullOrEmpty(dto.Name) || (r._Consultant.FirstName + "" + r._Consultant.LastName).Contains(dto.Name))).OrderBy(x => x.Updated);
 
@@ -74,7 +74,7 @@ namespace Fmarketer.Business
                 var request = new Request() {
                     Message = dto.Message,
                     Service = dto.Service,
-                    _User = credential.User,
+                    _User = (User)credential.User,
                     _Consultant = consultant
                 };
 

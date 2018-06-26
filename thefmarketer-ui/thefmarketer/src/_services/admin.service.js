@@ -22,6 +22,13 @@ function searchconsultant(token, minrating, maxrating, name, state, service) {
             }
 
             return response.json();
+        })
+        .then(output => {
+            if (output) {
+                var consultants = JSON.stringify(output);
+            }
+
+            return consultants;
         });
 }
 
@@ -56,7 +63,5 @@ function updaterequest(token, requestId, isActive) {
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }

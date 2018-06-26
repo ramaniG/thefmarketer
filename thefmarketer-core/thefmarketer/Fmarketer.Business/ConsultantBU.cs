@@ -39,8 +39,8 @@ namespace Fmarketer.Business
             var credential = await securityTokenBU.CheckTokenAsync(dto.Token);            
 
             if (credential.Credential.UserType == USERTYPES.Consultant) {
-                if (!(credential.Consultant._Coverages.Exists(c => c.State == dto.State))) {
-                    var consultant = credential.Consultant;
+                var consultant = (Consultant)credential.User;
+                if (!(consultant._Coverages.Exists(c => c.State == dto.State))) {                    
                     var coverage = new ConsultantCoverage() {
                         Location = dto.Location,
                         State = dto.State,
@@ -60,7 +60,7 @@ namespace Fmarketer.Business
             var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
 
             if (credential.Credential.UserType == USERTYPES.Consultant) {
-                var consultant = credential.Consultant;
+                var consultant = (Consultant)credential.User;
                 var service = new ConsultantService() {
                     ActiveSince = dto.ActiveSince,
                     ClientScale = dto.ClientScale,
@@ -129,7 +129,7 @@ namespace Fmarketer.Business
             var credential = await securityTokenBU.CheckTokenAsync(dto.Token);
 
             if (credential.Credential.UserType == USERTYPES.Consultant) {
-                var consultant = credential.Consultant;
+                var consultant = (Consultant)credential.User;
                 var requests = consultant._Requests.FindAll(r => (r.Service == dto.Service.Value || !dto.Service.HasValue) &&
                     ((r._User.FirstName + "" + r._User.LastName).Contains(dto.Name) || string.IsNullOrEmpty(dto.Name))).OrderBy(x => x.Updated);
 

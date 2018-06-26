@@ -31,7 +31,7 @@ namespace Fmarketer.Business
             securityTokenBU = new SecurityTokenBU(securityTokenRepository, user, consultant, admin);
         }
 
-        public async Task<AddUserOutputDto> AddUserAsync(AddUserDto dto)
+        public async Task<CredentialUserDto> AddUserAsync(AddUserDto dto)
         {
             // TODO : Add new user based on different auth type
 
@@ -42,13 +42,13 @@ namespace Fmarketer.Business
             switch (dto.UserType) {
                 case USERTYPES.User:
                     var user = await CreateUserAsync(dto, credential);
-                    return new AddUserOutputDto(credential, user);
+                    return new CredentialUserDto(credential, user);
                 case USERTYPES.Consultant:
                     var consultant = await CreateConsultantAsync(dto, credential);
-                    return new AddUserOutputDto(credential, consultant);
+                    return new CredentialUserDto(credential, consultant);
                 case USERTYPES.Admin:
                     var admin = await CreateAdminAsync(dto, credential);
-                    return new AddUserOutputDto(credential, admin);
+                    return new CredentialUserDto(credential, admin);
                 case USERTYPES.SuperAdmin:
                     break;
                 default:
@@ -112,26 +112,26 @@ namespace Fmarketer.Business
             // Check permission to update
             if (credential.Credential.UserType == USERTYPES.Admin || credential.Credential.UserType == USERTYPES.SuperAdmin) {
                 // Admin can update any user
-                var list = new List<GetUserOutputDto>();
+                var list = new List<CredentialUserDto>();
                 // Get Admin
                 var admins = await adminRepository.GetAll();
                 for (int i = 0; i < admins.Count(); i++) {
                     var item = admins.ElementAt(i);
-                    list.Add(new GetUserOutputDto(item._Credential, item));
+                    list.Add(new CredentialUserDto(item._Credential, item));
                 }
 
                 // Get Consultants
                 var consultants = await consultantRepository.GetAll();
                 for (int i = 0; i < consultants.Count(); i++) {
                     var item = consultants.ElementAt(i);
-                    list.Add(new GetUserOutputDto(item._Credential, item));
+                    list.Add(new CredentialUserDto(item._Credential, item));
                 }
 
                 // Get Users
                 var users = await userRepository.GetAll();
                 for (int i = 0; i < users.Count(); i++) {
                     var item = users.ElementAt(i);
-                    list.Add(new GetUserOutputDto(item._Credential, item));
+                    list.Add(new CredentialUserDto(item._Credential, item));
                 }
 
                 var output = new GetUsersOutputDto() {

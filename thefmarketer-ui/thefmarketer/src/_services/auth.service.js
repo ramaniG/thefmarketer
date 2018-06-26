@@ -23,20 +23,13 @@ function login(email, password) {
             return response.json();
         })
         .then(output => {
+            console.log(output);
             // login successful if there's a jwt token in the response
             if (output) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                all = JSON.stringify(output);
-                credential = all.credentialUser.credential;
-                token = all.securityToken;
-
-                if (credential.AuthType == 0) {
-                    user = all.credentialUser.user;
-                } else if (credential.AuthType == 1) {
-                    user = all.credentialUser.consultant;
-                } else if (credential.AuthType == 2) {
-                    user = all.credentialUser.admin;
-                }
+                var credential = output.credentialUser.credential;
+                var token = output.securityToken;
+                var user = output.credentialUser.user;
 
                 localStorage.setItem('user', JSON.stringify(user));
                 localStorage.setItem('credential', JSON.stringify(credential));
@@ -48,25 +41,27 @@ function login(email, password) {
     );
 }
 
-function logout(token) {
+function logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('user');
-    localStorage.removeItem('credential');
-    localStorage.removeItem('token');
+    var token = JSON.parse(localStorage.getItem('token'));
+    if (token) {
+        var id = token.id;
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ Token : id })
+        };
+    
+        return fetch(BASE_URL + '/logout/', requestOptions)
+            .then(response => {
+                console.log(response);
+                if (!response.ok || response.status !== 200) {
+                    return Promise.reject(response.statusText);
+                }
 
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token })
-    };
-
-    return fetch(BASE_URL + '/logout/', requestOptions)
-        .then(response => {
-            console.log(response);
-            if (!response.ok || response.status !== 200) {
-                return Promise.reject(response.statusText);
-            }
-
-            return response.json();
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('credential');
         });
+    }     
 }

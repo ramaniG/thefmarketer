@@ -12,7 +12,7 @@ class AccountToggler extends React.Component {
                 <div className="thumbnail">
                   <img src="/img/profile-avatar.png" className="img-circle" width="100" height="100" />
                   <div className="caption">
-                    <h3>{user.fname + " " + user.lname}</h3>
+                    <h3>{user.firstName + " " + user.lastName}</h3>
                   </div>
                 </div>
               </a>
@@ -29,8 +29,8 @@ class AccountToggler extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { authentication } = state;
-    const { user } = authentication;
+    const { auth } = state;
+    const { user } = auth;
     return {
         user
     };

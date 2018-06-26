@@ -1,13 +1,11 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux'
-import { authentication } from './authentication.reducer';
-import { search } from './search.reducer';
+import { auth } from './auth.reducer';
 import { alert } from './alert.reducer';
 
 const rootReducer = combineReducers({
-  authentication,
+  auth,
   alert,
-  search,
   router: routerReducer
 });
 

@@ -40,7 +40,7 @@ class HomePage extends React.Component {
       return (
         <div className="main">
           <div className="row">
-            <AccountToggler />
+            < AccountToggler />
           </div>
           <div className="row">
           <h3>Search for Services</h3>
@@ -89,8 +89,8 @@ class HomePage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { authentication } = state;
-    const { user } = authentication;
+    const { auth } = state;
+    const { user } = auth;
     return {
         user
     };

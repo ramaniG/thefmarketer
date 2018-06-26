@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { userActions } from './_actions';
+import { authAction } from './_actions';
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -8,7 +8,7 @@ class LoginPage extends React.Component {
         const { dispatch } = this.props;
 
         // reset login status
-        dispatch(userActions.logout());
+        dispatch(authAction.logout());
 
         this.state = {
             email: '',
@@ -32,7 +32,7 @@ class LoginPage extends React.Component {
         const { email, password } = this.state;
         const { dispatch } = this.props;
         if (email && password) {
-            dispatch(userActions.login(email, password));
+            dispatch(authAction.login(email, password));
         }
     }
 
@@ -59,7 +59,7 @@ class LoginPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { loggingIn } = state.authentication;
+    const { loggingIn } = state.auth;
     return {
         loggingIn
     };
