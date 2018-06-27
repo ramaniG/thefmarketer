@@ -61,7 +61,7 @@ namespace thefmarketer.Controllers
             return Ok();
         }
 
-        [HttpPost("SendChat")]
+        [HttpPost("Chat")]
         public async Task<IActionResult> SendChat([FromBody]SendChatDto dto)
         {
             await userBU.SendChatAsync(dto);

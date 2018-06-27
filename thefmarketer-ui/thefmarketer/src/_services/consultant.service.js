@@ -10,11 +10,11 @@ export const consultantService = {
     addchat
 };
 
-function searchrequest(token, name, service) {
+function searchrequest(Token, Name, Service) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, name, service })
+        body: JSON.stringify({ Token, Name, Service })
     };
 
     return fetch(BASE_URL + '/searchrequest/', requestOptions)
@@ -25,14 +25,21 @@ function searchrequest(token, name, service) {
             }
 
             return response.json();
+        })
+        .then(output => {
+            if (output) {
+                var requests = output;
+            }
+
+            return requests;
         });
 }
 
-function addstate(token, state, location) {
+function addstate(Token, State, Location) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, state, location })
+        body: JSON.stringify({ Token, State, Location })
     };
 
     return fetch(BASE_URL + '/state/', requestOptions)
@@ -41,16 +48,14 @@ function addstate(token, state, location) {
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }
 
-function addservice(token, service, company, licenseActive, registrationNo, activeSince, yearsOfExp, clientScale, proof) {
+function addservice(Token, Service, Company, LicenseActive, RegistrationNo, ActiveSince, YearsOfExp, ClientScale, Proof) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, service, company, licenseActive, registrationNo, activeSince, yearsOfExp, clientScale, proof })
+        body: JSON.stringify({ Token, Service, Company, LicenseActive, RegistrationNo, ActiveSince, YearsOfExp, ClientScale, Proof })
     };
 
     return fetch(BASE_URL + '/service/', requestOptions)
@@ -59,16 +64,14 @@ function addservice(token, service, company, licenseActive, registrationNo, acti
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }
 
-function updatestate(token, coverageId, state, location, isDeleted) {
+function updatestate(Token, CoverageId, State, Location, IsDeleted) {
     const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, coverageId, state, location, isDeleted })
+        body: JSON.stringify({ Token, CoverageId, State, Location, IsDeleted })
     };
 
     return fetch(BASE_URL + '/state/', requestOptions)
@@ -77,16 +80,14 @@ function updatestate(token, coverageId, state, location, isDeleted) {
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }
 
-function updateservice(token, serviceId, service, company, licenseActive, registrationNo, activeSince, yearsOfExp, clientScale, proof, isDeleted) {
+function updateservice(Token, ServiceId, Service, Company, LicenseActive, RegistrationNo, ActiveSince, YearsOfExp, ClientScale, Proof, IsDeleted) {
     const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, serviceId, service, company, licenseActive, registrationNo, activeSince, yearsOfExp, clientScale, proof, isDeleted })
+        body: JSON.stringify({ Token, ServiceId, Service, Company, LicenseActive, RegistrationNo, ActiveSince, YearsOfExp, ClientScale, Proof, IsDeleted })
     };
 
     return fetch(BASE_URL + '/service/', requestOptions)
@@ -95,16 +96,14 @@ function updateservice(token, serviceId, service, company, licenseActive, regist
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }
 
-function addchat(token, message, RequestId) {
+function addchat(Token, Message, RequestId) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, message, RequestId })
+        body: JSON.stringify({ Token, Message, RequestId })
     };
 
     return fetch(BASE_URL + '/chat/', requestOptions)
@@ -113,7 +112,5 @@ function addchat(token, message, RequestId) {
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }

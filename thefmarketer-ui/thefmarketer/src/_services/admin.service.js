@@ -25,7 +25,7 @@ function searchconsultant(token, minrating, maxrating, name, state, service) {
         })
         .then(output => {
             if (output) {
-                var consultants = JSON.stringify(output);
+                var consultants = output;
             }
 
             return consultants;
@@ -47,6 +47,13 @@ function searchrequest(token, name, service) {
             }
 
             return response.json();
+        })
+        .then(output => {
+            if (output) {
+                var requests = output;
+            }
+
+            return requests;
         });
 }
 

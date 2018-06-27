@@ -10,11 +10,11 @@ export const userService = {
     addchat
 };
 
-function searchconsultant(token, minrating, maxrating, name, state, service) {
+function searchconsultant(Token, MinRating, MaxRating, Name, State, Service) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, minrating, maxrating, name, state, service })
+        body: JSON.stringify({ Token, MinRating, MaxRating, Name, State, Service })
     };
 
     return fetch(BASE_URL + '/searchconsultant/', requestOptions)
@@ -25,14 +25,21 @@ function searchconsultant(token, minrating, maxrating, name, state, service) {
             }
 
             return response.json();
+        })
+        .then(output => {
+            if (output) {
+                var consultants = output;
+            }
+
+            return consultants;
         });
 }
 
-function createrequest(token, message, service, consultantId) {
+function createrequest(Token, Message, Service, ConsultantId) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, message, service, consultantId })
+        body: JSON.stringify({ Token, Message, Service, ConsultantId })
     };
 
     return fetch(BASE_URL + '/createrequest/', requestOptions)
@@ -41,16 +48,14 @@ function createrequest(token, message, service, consultantId) {
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }
 
-function updaterequest(token, requestId, isActive) {
+function updaterequest(Token, RequestId, IsActive) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, requestId, isActive })
+        body: JSON.stringify({ Token, RequestId, IsActive })
     };
 
     return fetch(BASE_URL + '/updaterequest/', requestOptions)
@@ -59,16 +64,14 @@ function updaterequest(token, requestId, isActive) {
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }
 
-function completerequest(token, requestId, star, message, isPublic) {
+function completerequest(Token, RequestId, Star, Message, IsPublic) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, requestId, star, message, isPublic })
+        body: JSON.stringify({ Token, RequestId, Star, Message, IsPublic })
     };
 
     return fetch(BASE_URL + '/completerequest/', requestOptions)
@@ -77,16 +80,14 @@ function completerequest(token, requestId, star, message, isPublic) {
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }
 
-function searchrequest(token, name, service) {
+function searchrequest(Token, Name, Service) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, name, service })
+        body: JSON.stringify({ Token, Name, Service })
     };
 
     return fetch(BASE_URL + '/searchrequest/', requestOptions)
@@ -97,14 +98,21 @@ function searchrequest(token, name, service) {
             }
 
             return response.json();
+        })
+        .then(output => {
+            if (output) {
+                var requests = output;
+            }
+
+            return requests;
         });
 }
 
-function addchat(token, message, RequestId) {
+function addchat(Token, Message, RequestId) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, message, RequestId })
+        body: JSON.stringify({ Token, Message, RequestId })
     };
 
     return fetch(BASE_URL + '/chat/', requestOptions)
@@ -113,7 +121,5 @@ function addchat(token, message, RequestId) {
             if (!response.ok || response.status !== 200) {
                 return Promise.reject(response.statusText);
             }
-
-            return response.json();
         });
 }
