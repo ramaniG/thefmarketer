@@ -1,7 +1,6 @@
 ﻿using Fmarketer.Base;
 using Fmarketer.Base.Enums;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Fmarketer.Models.Model
 {

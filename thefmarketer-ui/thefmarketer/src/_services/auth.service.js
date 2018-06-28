@@ -27,12 +27,10 @@ function login(email, password) {
             // login successful if there's a jwt token in the response
             if (output) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                var credential = output.credentialUser.credential;
-                var token = output.securityToken;
-                var user = output.credentialUser.user;
+                var token = output.token;
+                var user = output.user;
 
                 localStorage.setItem('user', JSON.stringify(user));
-                localStorage.setItem('credential', JSON.stringify(credential));
                 localStorage.setItem('token', JSON.stringify(token));
             }
 
@@ -45,11 +43,10 @@ function logout() {
     // remove user from local storage to log user out
     var token = JSON.parse(localStorage.getItem('token'));
     if (token) {
-        var id = token.id;
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ Token : id })
+            body: JSON.stringify({ Token : token })
         };
     
         return fetch(BASE_URL + '/logout/', requestOptions)
@@ -61,7 +58,6 @@ function logout() {
 
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
-                localStorage.removeItem('credential');
         });
     }     
 }

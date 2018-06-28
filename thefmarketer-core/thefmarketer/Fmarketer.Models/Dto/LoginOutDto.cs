@@ -4,12 +4,14 @@ namespace Fmarketer.Models.Dto
 {
     public class LoginOutDto
     {
-        public CredentialUserDto CredentialUser { get; set; }
-        public SecurityToken SecurityToken { get; set; }
+        private SecurityToken SecurityToken { get; set; }
+
+        public CredentialUserDto User { get; set; }
+        public string Token { get { return SecurityToken.Id.ToString(); } }
 
         public LoginOutDto(Credential credential, SecurityToken securityToken, BaseUser user)
         {
-            CredentialUser = new CredentialUserDto(credential, user);
+            User = new CredentialUserDto(credential, user);
             SecurityToken = securityToken;
         }
     }

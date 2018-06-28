@@ -1,3 +1,19 @@
+div {
+  background-color: transparent !important;
+}
+
+input {
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-radius: 0px !important;
+  background-color: transparent !important;
+}
+
+.input-group-text {
+  border : none !important;
+}
+
 /*Login*/
 .main {
   max-width: 330px;
@@ -36,6 +52,18 @@ h3 {
 }
 
 /*User Landing*/
+.background-blue {
+    background-image: url("/img/BGTop_Blue.png");
+    background-repeat: no-repeat, no-repeat;
+    background-size: contain;
+}
+
+.background-red {
+  background-image: url("/img/BGTop_Red.png");
+  background-repeat: no-repeat, no-repeat;
+  background-size: contain;
+}
+
 .container {
     max-width: 330px;
     width: 330px !important;
@@ -77,7 +105,6 @@ h3 {
   }
   #effect {
     position: relative;
-    background-color: white;
     width: 330px;
     height: 100%;
     padding: 0.4em;

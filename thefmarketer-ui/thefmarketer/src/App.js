@@ -7,6 +7,7 @@ import { LoginPage } from './login';
 import { HomePage } from './home';
 import { PrivateRoute } from './_components';
 import { Route } from 'react-router';
+import 'bootstrap';
 
 class App extends React.Component {
     constructor(props) {
@@ -25,11 +26,13 @@ class App extends React.Component {
     }
 
     render() {
+        const { user } = this.props;
+        var isUser = (user) ? ((user.userType == 'User') ? true : false) : true;
         return (
           <ConnectedRouter history={history}>
-            <div>
-              <PrivateRoute exact path="/" component={HomePage}/>
+            <div className={(isUser) ? 'container background-red' : 'container background-blue'}>
               <Route path="/login" component={LoginPage}/>
+              <PrivateRoute exact path="/" component={HomePage}/>
             </div>
           </ConnectedRouter>
         );
@@ -37,9 +40,10 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { alert } = state;
+    const { alert, auth } = state;
+    const { user } = auth;
     return {
-        alert
+        alert, user
     };
 }
 

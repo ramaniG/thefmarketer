@@ -41,17 +41,27 @@ class LoginPage extends React.Component {
         const { email, password, submitted } = this.state;
         return (
           <div className="main">
-            <h3>Sign In</h3>
-            <button type="submit" className="btn-block btn btn-primary">Facebook</button>
-            <form onSubmit={this.handleSubmit}>
-              <div className="login-or">
-                <hr className="hr-or" />
-                <span className="span-or">or</span>
-              </div>
-              <input type="text" className="form-control" name="email" value={email} placeholder="Email" onChange={this.handleChange} />
-              <input type="password" className="form-control" name="password" value={password} placeholder="Password" onChange={this.handleChange} />
-              <button type="submit" className="btn-block btn btn-primary">Log In</button>
-              <a href="#">Forgot password?</a>
+            <h3><img src='/img/LOGO_LOOK.png' width='180px'/></h3>
+            <button type="submit" className="btn-block btn btn-primary" style={{marginTop:100}}>Facebook</button>
+            <form onSubmit={this.handleSubmit} >
+                <div className="login-or">
+                    <hr className="hr-or" />
+                    <span className="span-or">or</span>
+                </div>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><span class="fas fa-at"></span></div>
+                    </div>
+                    <input type="text" className="form-control" name="email" value={email} placeholder="Email" onChange={this.handleChange} />
+                </div>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><span class="fas fa-key"></span></div>
+                    </div>
+                    <input type="password" className="form-control" name="password" value={password} placeholder="Password" onChange={this.handleChange} />
+                </div>
+                <button type="submit" className="btn-block btn btn-primary">Log In</button>
+                <a href="#">Forgot password?</a>
             </form>
           </div>
         );

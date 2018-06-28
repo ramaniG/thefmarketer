@@ -23,7 +23,7 @@ namespace Fmarketer.Business
             adminRepository = admin;
         }
 
-        public async Task<CredentialUserDto> CheckTokenAsync(string token)
+        public async Task<CredentialUser> CheckTokenAsync(string token)
         {
             var secToken = await securityTokenRepository.CheckAndUpdateAsync(new Guid(token));
 
@@ -37,18 +37,18 @@ namespace Fmarketer.Business
                 throw new UnauthorizedAccessException(ErrorMessage.USERMGMT_UNAUTHORIZED);
             }
 
-            CredentialUserDto users = null;
+            CredentialUser users = null;
 
             // Find User
             switch (credential.UserType) {
                 case USERTYPES.User:
-                    users = new CredentialUserDto(credential, await userRepository.FindByCredentialAsync(credential.Id));
+                    users = new CredentialUser(credential, await userRepository.FindByCredentialAsync(credential.Id));
                     break;
                 case USERTYPES.Consultant:
-                    users = new CredentialUserDto(credential, await consultantRepository.FindByCredentialAsync(credential.Id));
+                    users = new CredentialUser(credential, await consultantRepository.FindByCredentialAsync(credential.Id));
                     break;
                 case USERTYPES.Admin:
-                    users = new CredentialUserDto(credential, await adminRepository.FindByCredentialAsync(credential.Id));
+                    users = new CredentialUser(credential, await adminRepository.FindByCredentialAsync(credential.Id));
                     break;
                 case USERTYPES.SuperAdmin:
                     break;
