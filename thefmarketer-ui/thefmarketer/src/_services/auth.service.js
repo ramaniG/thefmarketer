@@ -34,7 +34,7 @@ function login(email, password) {
                 localStorage.setItem('token', JSON.stringify(token));
             }
 
-            return user;
+            return { user, token };
         }
     );
 }

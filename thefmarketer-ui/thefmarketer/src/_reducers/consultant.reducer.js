@@ -2,7 +2,7 @@ import { consultantConstants } from '../_constants';
 
 const initialState = {};
 
-export function user(state = initialState, action) {
+export function consultant(state = initialState, action) {
   switch (action.type) {
     case consultantConstants.SEARCH_REQUEST_REQUEST:
     case consultantConstants.SEARCH_REQUEST_FAILURE: 

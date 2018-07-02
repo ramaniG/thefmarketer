@@ -15,8 +15,10 @@ function login(username, password) {
         authService.login(username, password)
             .then(
                 user => {
-                    dispatch(success(user));
-                    history.push('/');
+                    dispatch(success(user.user, user.token));
+                    if (user.user.userType === "Consultant") history.push("consultant_home");
+                    else if (user.user.userType === "User") history.push("user_home");
+                    else history.push('/');
                 },
                 error => {
                     dispatch(failure(error));
@@ -25,7 +27,7 @@ function login(username, password) {
             );
     };
 
-    function request(user) { return { type: authConstant.LOGIN_REQUEST, user } }
+    function request(user, token) { return { type: authConstant.LOGIN_REQUEST, user, token } }
     function success(user) { return { type: authConstant.LOGIN_SUCCESS, user } }
     function failure(error) { return { type: authConstant.LOGIN_FAILURE, error } }
 }

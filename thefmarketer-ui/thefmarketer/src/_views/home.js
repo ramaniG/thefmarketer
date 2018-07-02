@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { AccountToggler } from './_components';
-import { consultantActions } from './_actions';
+import { AccountToggler } from '../_components';
+import { consultantActions } from '../_actions';
 
 class HomePage extends React.Component {
   constructor(props) {
@@ -98,4 +98,3 @@ function mapStateToProps(state) {
 
 const connectedHomePage = connect(mapStateToProps)(HomePage);
 export { connectedHomePage as HomePage };
-//export { HomePage };

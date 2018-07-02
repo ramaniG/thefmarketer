@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { authAction } from './_actions';
+import { authAction } from '../_actions';
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -48,15 +48,15 @@ class LoginPage extends React.Component {
                     <hr className="hr-or" />
                     <span className="span-or">or</span>
                 </div>
-                <div class="input-group mb-2 mr-sm-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><span class="fas fa-at"></span></div>
+                <div className="input-group mb-2 mr-sm-2">
+                    <div className="input-group-prepend">
+                        <div className="input-group-text"><span className="fas fa-at"></span></div>
                     </div>
                     <input type="text" className="form-control" name="email" value={email} placeholder="Email" onChange={this.handleChange} />
                 </div>
-                <div class="input-group mb-2 mr-sm-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><span class="fas fa-key"></span></div>
+                <div className="input-group mb-2 mr-sm-2">
+                    <div className="input-group-prepend">
+                        <div className="input-group-text"><span className="fas fa-key"></span></div>
                     </div>
                     <input type="password" className="form-control" name="password" value={password} placeholder="Password" onChange={this.handleChange} />
                 </div>
