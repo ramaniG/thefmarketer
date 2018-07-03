@@ -1,5 +1,5 @@
 
-const BASE_URL = 'http://localhost:58863/api/consultant/';
+const BASE_URL = 'http://localhost:58863/api/consultant';
 
 export const consultantService = {
     searchrequest,

@@ -31,19 +31,55 @@ class ConsultantHomePage extends React.Component {
       const { user } = this.props;
       return (
         <div className="main">
-          <div className="row">
-          <h3>Search for Services</h3>
-          <div className="icon-addon addon-sm">
-            <span className="glyphicon glyphicon-briefcase"></span>
-          </div>
-          <div className="icon-addon addon-sm">
-            <span className="glyphicon glyphicon-map-marker" style={{ paddingTop: 42 }}></span>
-          </div>
-          <div className="icon-addon addon-lg">
-            <label className="glyphicon glyphicon-user"  style={{ paddingTop: 76 }}></label>
-          </div>
+          <h3>REQUESTS</h3>
+          <ul className="list-unstyled ul-request-list">
+            <li className="shadow">
+              <div className="row div-request">
+                  <div class="col-3">
+                    <img class="mr-3 rounded-circle img-profile" src="/img/profile-avatar.png" alt="Generic placeholder image" />
+                  </div>
+                  <div class="col-9">
+                    <h6 class="text-left">User name</h6>
+                    <div class="mt-0 mb-1 text-left">List-based media object</div>
+                  </div>
+              </div>
+              <div className="row">
+                  <div role="button" class="col div-button-yes"><span className="fa fa-check"></span></div>
+                  <div role="button" class="col div-button-no"><span className="fa fa-times"></span></div>
+              </div>
+            </li>
+            <li className="shadow">
+              <div className="row div-request">
+                  <div class="col-3">
+                    <img class="mr-3 rounded-circle img-profile" src="/img/profile-avatar.png" alt="Generic placeholder image" />
+                  </div>
+                  <div class="col-9">
+                    <h6 class="text-left">User name</h6>
+                    <div class="mt-0 mb-1 text-left">List-based media object</div>
+                  </div>
+              </div>
+              <div className="row">
+                  <div role="button" class="col div-button-yes"><span className="fa fa-check"></span></div>
+                  <div role="button" class="col div-button-no"><span className="fa fa-times"></span></div>
+              </div>
+            </li>
+            <li className="shadow">
+              <div className="row div-request">
+                  <div class="col-3">
+                    <img class="mr-3 rounded-circle img-profile" src="/img/profile-avatar.png" alt="Generic placeholder image" />
+                  </div>
+                  <div class="col-9">
+                    <h6 class="text-left">User name</h6>
+                    <div class="mt-0 mb-1 text-left">List-based media object</div>
+                  </div>
+              </div>
+              <div className="row">
+                  <div role="button" class="col div-button-yes"><span className="fa fa-check"></span></div>
+                  <div role="button" class="col div-button-no"><span className="fa fa-times"></span></div>
+              </div>
+            </li>
+          </ul>
           <button type="submit" className="btn-block btn btn-primary" onClick={this.handleSubmit}>Search</button>
-          </div>
         </div>
       );
   }

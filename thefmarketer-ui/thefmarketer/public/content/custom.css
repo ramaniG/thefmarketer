@@ -2,11 +2,14 @@ body *
 {
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
   font-weight: bold !important;
+  font-size: 10px;
   /* font-family: 'Open Sans'; */
 }
 
 .container {  
   background-color: #f1f1f1 !important;
+  max-width: 330px;
+  width: 330px !important;
 }
 
 div {
@@ -38,31 +41,6 @@ button {
   padding: 15px;
   text-align: center!important;
 }
-.login-or {
-  position: relative;
-  font-size: 18px;
-  color: #aaa;
-  margin-top: 10px;
-          margin-bottom: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.span-or {
-  display: block;
-  position: absolute;
-  left: 50%;
-  top: -2px;
-  margin-left: -25px;
-  background-color: #f1f1f1;
-  width: 50px;
-  text-align: center;
-}
-.hr-or {
-  background-color: #cdcdcd;
-  height: 1px;
-  margin-top: 0px !important;
-  margin-bottom: 0px !important;
-}
 h3 {
   text-align: center;
   line-height: 300%;
@@ -81,68 +59,32 @@ h3 {
   background-size: contain;
 }
 
-.container {
-    max-width: 330px;
-    width: 330px !important;
+.img-profile {
+  width: 50px;
+  height: 50px;
 }
 
-.icon-addon {
-    position: relative;
-    color: #555;
-    display: block;
+.background-white {
+  background-color: white;
 }
 
-.icon-addon.addon-md .form-control, .icon-addon .form-control {
-    padding-left: 30px;
-    float: left;
-    font-weight: normal;
+.div-button-yes {
+  background: linear-gradient(to right, #f4b840, #f4a15b, #df4a50);
+  border : none !important;
+  padding : 10px;
 }
 
-.icon-addon.addon-md .glyphicon, .icon-addon .glyphicon, .icon-addon.addon-md .fa, .icon-addon .fa {
-    position: absolute;
-    z-index: 2;
-    left: 10px;
-    font-size: 14px;
-    width: 20px;
-    margin-left: -2.5px;
-    text-align: center;
-    padding: 10px 0;
-    top: 1px;
+.div-button-no {
+  background-color: #b2b2b2 !important;
+  border : none !important;
+  padding : 10px;
 }
 
+.div-request {
+  background-color: white !important;
+  padding: 10px 0;
+}
 
-.toggler {
-    height: 100%;
-    z-index: 3;
-    /* position: absolute; */
-  }
-  #button {
-    padding: .5em 1em;
-    text-decoration: none;
-  }
-  #effect {
-    position: relative;
-    width: 330px;
-    height: 100%;
-    padding: 0.4em;
-  }
-  #effect h3 {
-    margin: 0;
-    padding: 0.4em;
-    text-align: center;
-  }
-
-
-  #slider12a .slider-selection {
-	   background: orange;
-  }
-  #slider12a .slider-handle {
-	   background: orange;
-  }
-
-  .star-rating {
-    line-height:32px;
-    font-size:1.25em;
-  }
-
-  .star-rating .glyphicon-star{color: orange;}
+.ul-request-list li {
+  margin-bottom: 10px;
+}

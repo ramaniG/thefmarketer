@@ -27,8 +27,8 @@ function login(username, password) {
             );
     };
 
-    function request(user, token) { return { type: authConstant.LOGIN_REQUEST, user, token } }
-    function success(user) { return { type: authConstant.LOGIN_SUCCESS, user } }
+    function request(user) { return { type: authConstant.LOGIN_REQUEST, user} }
+    function success(user, token) { return { type: authConstant.LOGIN_SUCCESS, user, token  } }
     function failure(error) { return { type: authConstant.LOGIN_FAILURE, error } }
 }
 

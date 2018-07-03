@@ -1,7 +1,6 @@
 import { consultantConstants } from '../_constants';
 import { consultantService } from '../_services';
 import { alertActions } from './';
-import { history } from '../_helpers';
 
 export const consultantActions = {
     searchrequest,
@@ -20,7 +19,6 @@ function searchrequest(Token, Name, Service) {
             .then(
                 requests => {
                     dispatch(success(requests));
-                    history.push('/requests');
                 },
                 error => {
                     dispatch(failure(error));
